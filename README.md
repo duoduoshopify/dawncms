@@ -11,9 +11,23 @@
 
 ## 快速开始
 
+**一键安装（推荐）**：克隆后运行安装脚本，自动建 venv、装依赖、生成带随机密码的 `.env`——
+
 ```bash
-cd /var/www/blog_standalone
-python -m venv venv && source venv/bin/activate
+git clone git@github.com:duoduoshopify/dawncms.git && cd dawncms
+
+# Linux / macOS
+bash install.sh && ./start.sh
+
+# Windows：双击 install.bat 安装，然后双击 start.bat 启动
+```
+
+唯一前置要求：Python 3.10+（推荐 3.12，Windows 安装时勾选 "Add python.exe to PATH"）。
+
+**手动安装**：
+
+```bash
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env   # 修改站点名、域名、管理密码、SESSION_SECRET
 python dawn_main.py    # 默认端口 5010
