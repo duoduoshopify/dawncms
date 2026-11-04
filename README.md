@@ -1,4 +1,4 @@
-# Blog Standalone
+# DawnCMS
 
 DawnCMS 独立博客系统（FastHTML + SQLite），可直接部署为任何网站的博客子站。
 

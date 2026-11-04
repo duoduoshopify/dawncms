@@ -316,7 +316,7 @@ _dawn_preview_var = contextvars.ContextVar("dawn_theme_preview", default=None)
 
 
 def dawn_preview_signature(key: str) -> str:
-    secret = os.environ.get("SESSION_SECRET", "blog-standalone-secret-change-me")
+    secret = os.environ.get("SESSION_SECRET", "dawncms-secret-change-me")
     return hmac.new(secret.encode(), f"theme-preview:{key}".encode(), hashlib.sha256).hexdigest()[:32]
 
 

@@ -21,7 +21,7 @@ Path("database").mkdir(exist_ok=True)
 Path("static/uploads/blog").mkdir(parents=True, exist_ok=True)
 
 app, rt = fast_app(
-    secret_key=os.environ.get("SESSION_SECRET", "blog-standalone-secret-change-me"),
+    secret_key=os.environ.get("SESSION_SECRET", "dawncms-secret-change-me"),
     static_path="static",
 )
 
