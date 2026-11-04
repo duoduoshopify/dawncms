@@ -1,0 +1,120 @@
+{
+  "key": "classic",
+  "name": "经典 · 蓝墨",
+  "description": "白底蓝墨，简洁现代（完整主题包）",
+  "author": "DawnCMS",
+  "version": "1.1",
+  "preview": [
+    "#ffffff",
+    "#1f2937",
+    "#2563eb"
+  ],
+  "settings": {
+    "accent_color": {
+      "type": "color",
+      "label": "强调色（Accent）",
+      "default": "#2563eb",
+      "description": "链接、按钮、高亮等强调元素颜色",
+      "group": "颜色"
+    },
+    "body_font": {
+      "type": "select",
+      "label": "正文字体",
+      "options": [
+        "System sans-serif",
+        "Inter",
+        "Roboto",
+        "Raleway",
+        "Montserrat",
+        "Nunito Sans",
+        "Work Sans",
+        "Source Sans 3",
+        "System serif",
+        "Roboto Serif",
+        "Source Serif 4",
+        "Playfair Display"
+      ],
+      "default": "System sans-serif",
+      "description": "正文与界面字体。非系统字体从 Google Fonts 加载（国内网络自动回退系统字体）",
+      "group": "字体"
+    },
+    "headings_font": {
+      "type": "select",
+      "label": "标题字体",
+      "options": [
+        "System sans-serif",
+        "Inter",
+        "Roboto",
+        "Raleway",
+        "Montserrat",
+        "Nunito Sans",
+        "Work Sans",
+        "Source Sans 3",
+        "System serif",
+        "Roboto Serif",
+        "Source Serif 4",
+        "Playfair Display"
+      ],
+      "default": "System sans-serif",
+      "description": "各级标题字体",
+      "group": "字体"
+    },
+    "page_width": {
+      "type": "select",
+      "label": "页面宽度",
+      "options": [
+        "Page width",
+        "Full width"
+      ],
+      "default": "Page width",
+      "description": "Page width：内容限制在 1200px 居中；Full width：页头/内容/页脚随浏览器宽度铺满（保留两侧内边距）",
+      "group": "布局"
+    },
+    "email_signup_title": {
+      "type": "text",
+      "label": "订阅区块标题",
+      "default": "",
+      "description": "页脚订阅区标题，留空用默认文案",
+      "group": "订阅"
+    },
+    "email_signup_description": {
+      "type": "text",
+      "label": "订阅区块描述",
+      "default": "",
+      "description": "页脚订阅区描述文字，留空用默认文案",
+      "group": "订阅"
+    },
+    "about_card_title": {
+      "type": "text",
+      "label": "介绍版块标题",
+      "default": "",
+      "placeholder": "关于本站",
+      "description": "留空则使用默认多语言文案",
+      "group": "站点介绍"
+    },
+    "about_card_text": {
+      "type": "textarea",
+      "label": "介绍正文",
+      "default": "",
+      "placeholder": "介绍你自己、这个网站的初衷、内容方向……",
+      "description": "填写后前台会显示「站点介绍」版块；留空则整块不显示",
+      "group": "站点介绍"
+    },
+    "about_card_link": {
+      "type": "text",
+      "label": "介绍链接",
+      "default": "",
+      "placeholder": "/about",
+      "description": "可选。「了解更多」按钮指向的链接，留空则不显示按钮",
+      "group": "站点介绍"
+    },
+    "about_card_link_label": {
+      "type": "text",
+      "label": "链接按钮文案",
+      "default": "",
+      "placeholder": "了解更多 →",
+      "description": "留空使用默认多语言文案",
+      "group": "站点介绍"
+    }
+  }
+}

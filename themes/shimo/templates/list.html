@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block content %}
+{% if empty %}
+<div class="masthead">
+  <div class="max-w-2xl mx-auto px-6 py-28 text-center">
+    <span class="eyebrow block mb-6">{{ site_name }}</span>
+    <h1 class="ff-serif text-3xl md:text-4xl font-black text-[var(--ink)] mb-8">{{ empty_msg }}</h1>
+    <a href="{{ home_url or '/' }}" class="btn-primary">{{ t('back_all', '返回全部文章') }}</a>
+  </div>
+</div>
+{% else %}
+<section class="masthead">
+  <div class="max-w-[860px] mx-auto px-6 pt-16 pb-10 text-center">
+    <span class="eyebrow block mb-5">{{ site_name }}</span>
+    <h1 class="ff-serif text-4xl md:text-[3.4rem] leading-tight font-black text-[var(--ink)] mb-4">{{ heading }}</h1>
+    <p class="text-[var(--muted)] text-base mb-8">{{ sub_line }}</p>
+    {% if search_action|default('/search') %}
+    <form method="get" action="{{ search_action|default('/search') }}" class="flex justify-center">
+      <div class="relative w-full max-w-md">
+        <input type="search" name="q" value="{{ q or '' }}" placeholder="{{ t('search_ph', '搜索文章…') }}" class="w-full px-5 py-3 rounded-full bg-white border border-[var(--hairline)] text-[var(--ink-soft)] text-sm focus:outline-none focus:border-[var(--accent)]">
+        <button type="submit" class="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 py-2 rounded-full bg-[var(--ink)] text-[var(--paper)] text-xs font-semibold hover:bg-[var(--accent)]">{{ t('search_btn', '搜索') }}</button>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+  <div class="max-w-[1200px] mx-auto px-6 pb-8 hairline-b">
+    <div class="flex flex-wrap gap-x-7 gap-y-3 justify-center">
+      <a href="{{ home_url or '/' }}" class="cat-tab {% if not current_cat %}active{% endif %}">{{ t('tab_all', '全部') }}</a>
+      {% for c in cats %}
+      <a href="{{ c.url }}" class="cat-tab {% if current_cat == c.slug %}active{% endif %}">{{ c.name }} · {{ c.count }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "partials/about_card.html" %}
+
+{% if notice %}<div class="max-w-[1200px] mx-auto px-6 pt-6 text-center text-sm text-[var(--accent)]">{{ notice }}</div>{% endif %}
+
+{% if featured and not series_mode %}
+<section>
+  <div class="max-w-[1200px] mx-auto px-6 py-12">
+    <div class="mb-6">
+      <span class="eyebrow block mb-2">FEATURED</span>
+      <h2 class="ff-serif text-2xl font-black text-[var(--ink)]">{{ t('featured_title', '卷首选读') }}</h2>
+    </div>
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px] feature-grid">
+      <a href="{{ featured.url }}" class="block group h-full">
+        <div class="paper-card rounded-2xl overflow-hidden h-full flex flex-col">
+          <div class="feature-cover w-full overflow-hidden">
+            <img src="{{ featured.cover }}" alt="{{ featured.title }}" class="w-full h-full object-cover cover-img">
+          </div>
+          <div class="p-7 md:p-9">
+            <div class="mb-3">
+              <span class="text-[var(--accent)] text-xs font-bold tracking-widest">{{ featured.category }}</span>
+              {% if featured.member %}<span class="inline-block px-2 py-0.5 border border-[var(--accent)]/40 text-[var(--accent)] text-[11px] font-semibold rounded-full ml-2">{{ t('member_badge', '会员') }}</span>{% endif %}
+            </div>
+            <h3 class="ff-serif card-title text-2xl md:text-3xl font-black text-[var(--ink)] leading-snug mb-4">{{ featured.title }}</h3>
+            <p class="text-[var(--ink-2)] text-[15px] leading-relaxed mb-2 line-clamp-3">{{ featured.desc }}</p>
+            {% if featured.tags %}
+            <div class="flex flex-wrap gap-1.5 mt-3">
+              {% for tag in featured.tags %}<span class="inline-block px-2 py-0.5 text-[var(--muted)] text-[11px] rounded-full border border-[var(--hairline)] bg-white"># {{ tag.name }}</span>{% endfor %}
+            </div>
+            {% endif %}
+            <div class="flex items-center text-[var(--faint)] text-xs mt-4">
+              <span class="mr-4">{{ featured.date }}</span>
+              <span class="mr-4">{{ featured.read_time }}</span>
+              <span>{{ t('views_fmt', '{n} 阅读').replace('{n}', featured.views|string) }}</span>
+            </div>
+          </div>
+        </div>
+      </a>
+      <div class="lg:w-[380px] shrink-0">
+        <div class="p-4 rounded-2xl border border-[var(--hairline)] bg-[var(--card)]/60 h-full">
+          <span class="eyebrow block mb-4">{{ t('recent_title', '近期更新') }}</span>
+          {% for p in recent %}
+          <a href="{{ p.url }}" class="block group">
+            <div class="flex items-start p-4 rounded-xl border border-transparent hover:border-[var(--hairline)] hover:bg-white transition-all">
+              <span class="ff-serif text-[var(--hairline-strong)] text-xl font-black mr-4 mt-0.5 shrink-0">{{ "%02d"|format(loop.index) }}</span>
+              <div class="min-w-0">
+                <span class="text-[var(--accent)] text-[11px] font-bold tracking-widest">{{ p.category }}</span>
+                <h4 class="ff-serif text-[var(--ink)] font-bold text-[15px] mt-1 leading-snug line-clamp-2 card-title">{{ p.title }}</h4>
+                <div class="mt-1.5">
+                  <span class="text-[var(--faint)] text-xs mr-3">{{ p.date }}</span>
+                  <span class="text-[var(--faint)] text-xs">{{ p.read_time }}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section>
+  <div class="max-w-[1200px] mx-auto px-6 pb-14">
+    <div class="mb-8 flex items-baseline">
+      <div>
+        <span class="eyebrow block mb-2">ARCHIVE</span>
+        <h2 class="ff-serif text-2xl font-black text-[var(--ink)]">{{ t('all_posts', '全部文章') }}</h2>
+      </div>
+      <span class="text-[var(--faint)] text-sm ml-4 self-end pb-0.5">{{ t('total_fmt', '共 {n} 篇').replace('{n}', total|string) }} · {{ t('page_fmt', '第 {p}/{n} 页').replace('{p}', page|string).replace('{n}', pages|string) }}</span>
+    </div>
+    {% if series_mode %}
+    <ol class="border-t border-[var(--hairline)]">
+      {% for p in posts %}
+      <li>
+        <a href="{{ p.url }}" class="group flex items-baseline gap-4 py-4 border-b border-[var(--hairline)] px-2 -mx-2 rounded-lg hover:bg-[var(--card)]">
+          <span class="ff-serif text-[var(--accent)] text-lg font-black w-8 flex-none">{{ "%02d" % ((page - 1) * per_page + loop.index) }}</span>
+          <div class="min-w-0 flex-1">
+            <span class="ff-serif text-[16px] font-bold text-[var(--ink)] group-hover:text-[var(--accent)]">{{ p.title }}</span>
+            {% if p.member %}<span class="inline-block px-2 py-0.5 border border-[var(--accent)]/40 text-[var(--accent)] text-[11px] font-semibold rounded-full ml-2">{{ t('member_badge', '会员') }}</span>{% endif %}
+            <p class="text-[var(--muted)] text-xs mt-1 line-clamp-1">{{ p.desc }}</p>
+          </div>
+          <span class="text-[var(--faint)] text-xs flex-none">{{ p.date }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+    {% else %}
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {% for p in posts %}{% include "partials/post_card.html" %}{% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<nav class="max-w-[1200px] mx-auto px-6 pb-6 flex items-center justify-center gap-6">
+  {% if page > 1 %}
+  <a href="{{ base_url }}{{ page - 1 }}" rel="prev" class="px-5 py-2 rounded-full text-sm border border-[var(--hairline)] text-[var(--ink)] hover:border-[var(--accent)] hover:text-[var(--accent)]">{{ t('prev_page', '← 上一页') }}</a>
+  {% else %}
+  <span class="px-5 py-2 rounded-full text-sm border border-[var(--hairline-soft)] text-[var(--ghost)]">{{ t('prev_page', '← 上一页') }}</span>
+  {% endif %}
+  <span class="ff-serif text-[var(--muted)] text-sm">{{ page }} / {{ pages }}</span>
+  {% if page < pages %}
+  <a href="{{ base_url }}{{ page + 1 }}" rel="next" class="px-5 py-2 rounded-full text-sm border border-[var(--hairline)] text-[var(--ink)] hover:border-[var(--accent)] hover:text-[var(--accent)]">{{ t('next_page', '下一页 →') }}</a>
+  {% else %}
+  <span class="px-5 py-2 rounded-full text-sm border border-[var(--hairline-soft)] text-[var(--ghost)]">{{ t('next_page', '下一页 →') }}</span>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

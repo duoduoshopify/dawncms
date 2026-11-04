@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="max-w-[1200px] mx-auto px-5 xl:px-10 py-16 sm:py-20 md:py-28 text-center">
+  <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-[var(--ink)] mb-5">{{ page_title }}</h1>
+  <p class="max-w-3xl mx-auto text-[1.375rem] leading-8 text-[var(--muted)]">{{ page_desc }}</p>
+</section>
+
+<div class="max-w-7xl mx-auto px-5 lg:px-4 py-16 sm:py-20">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-1">
+    {% for p in posts %}
+    <div class="p-0 lg:p-6 rounded-2xl transition-colors duration-500 hover:bg-[var(--wash)]">
+      <a href="{{ p.url }}" class="block group">
+        {% if p.cover %}
+        <div class="dc-cover aspect-[5/4] mb-4">
+          <img src="{{ p.cover }}" alt="{{ p.title }}" loading="lazy" class="w-full h-full object-cover cover-img">
+        </div>
+        {% endif %}
+        <h2 class="text-lg font-semibold text-[var(--ink)] group-hover:opacity-80">{{ p.title }}</h2>
+        {% if p.desc %}<p class="mt-1.5 text-sm text-[var(--muted)] line-clamp-3">{{ p.desc }}</p>{% endif %}
+        <div class="mt-2 text-sm text-[var(--muted)]">
+          <span>{{ p.date }}</span>
+          {% if p.category %}<span class="opacity-50 mx-1">—</span><span>{{ p.category }}</span>{% endif %}
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% if not posts %}
+  <p class="text-center text-[var(--muted)] py-8">{{ t('showcase_empty', '暂无展示内容。给文章打上 hash-showcase 标签即可出现在这里。') }}</p>
+  {% endif %}
+</div>
+{% endblock %}

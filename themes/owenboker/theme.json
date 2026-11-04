@@ -1,0 +1,246 @@
+{
+  "key": "owenboker",
+  "name": "欧文博客",
+  "description": "文档知识库布局（分组目录侧栏 + 当前项圆点）、左对齐正文、上下篇导航、毛玻璃吸顶导航、⌘K 搜索、亮暗双模式、可配置灰阶/字体/侧栏风格/页面宽度",
+  "author": "DawnCMS",
+  "version": "2.4",
+  "preview": [
+    "#ffffff",
+    "#0f172a",
+    "#10b315"
+  ],
+  "settings": {
+    "accent_color": {
+      "type": "color",
+      "label": "强调色（Accent）",
+      "default": "#10b315",
+      "description": "按钮、链接高亮、当前项圆点等。参考站 ShopifyCoder 用的是绿色 #10b315",
+      "group": "颜色"
+    },
+    "body_font": {
+      "type": "select",
+      "label": "正文字体",
+      "options": [
+        "System sans-serif",
+        "Inter",
+        "Roboto",
+        "Raleway",
+        "Montserrat",
+        "Nunito Sans",
+        "Work Sans",
+        "Source Sans 3",
+        "System serif",
+        "Roboto Serif",
+        "Source Serif 4",
+        "Playfair Display"
+      ],
+      "default": "System sans-serif",
+      "description": "正文与界面字体。非系统字体会从 Google Fonts 加载（国内网络可能较慢，自动回退系统字体）",
+      "group": "字体"
+    },
+    "headings_font": {
+      "type": "select",
+      "label": "标题字体",
+      "options": [
+        "System sans-serif",
+        "Inter",
+        "Roboto",
+        "Raleway",
+        "Montserrat",
+        "Nunito Sans",
+        "Work Sans",
+        "Source Sans 3",
+        "System serif",
+        "Roboto Serif",
+        "Source Serif 4",
+        "Playfair Display"
+      ],
+      "default": "System sans-serif",
+      "description": "各级标题字体",
+      "group": "字体"
+    },
+    "docs_sidebar_style": {
+      "type": "select",
+      "label": "文档侧栏风格",
+      "options": [
+        "Neutral",
+        "Transparent",
+        "Dark"
+      ],
+      "default": "Neutral",
+      "description": "Neutral=浅灰底；Transparent=透明+右边线；Dark=深灰底（暗色模式下更深）",
+      "group": "布局"
+    },
+    "max_navigation_items": {
+      "type": "select",
+      "label": "导航最大条数",
+      "options": [
+        "5",
+        "6",
+        "7"
+      ],
+      "default": "5",
+      "description": "超出的导航项自动收进「…」下拉菜单",
+      "group": "布局"
+    },
+    "home_layout": {
+      "type": "select",
+      "label": "首页布局",
+      "options": [
+        "Docs",
+        "Magazine"
+      ],
+      "default": "Docs",
+      "description": "Docs：左侧文档目录侧栏 + 右侧区块（文档库式）；Magazine：居中杂志式布局，无侧栏，区块铺满",
+      "group": "布局"
+    },
+    "page_width": {
+      "type": "select",
+      "label": "页面宽度",
+      "options": [
+        "Page width",
+        "Full width"
+      ],
+      "default": "Page width",
+      "description": "Page width：内容限制在 1200px 居中（阅读舒适）；Full width：页头/内容/页脚随浏览器宽度铺满（保留两侧内边距）",
+      "group": "布局"
+    },
+    "blog_card_style": {
+      "type": "select",
+      "label": "博客卡片流样式",
+      "options": [
+        "Grid",
+        "Minimal",
+        "Directory"
+      ],
+      "default": "Grid",
+      "description": "列表页版式：Grid=三列封面网格；Minimal=月份时间线文字流；Directory=按分类分组目录",
+      "group": "布局"
+    },
+    "dark_theme_logo": {
+      "type": "image",
+      "label": "暗色模式 Logo",
+      "default": "",
+      "placeholder": "/static/logo-dark.svg 或完整 URL（留空沿用默认 logo）",
+      "description": "仅在暗色模式显示，尺寸需与默认 logo 一致",
+      "group": "品牌"
+    },
+    "email_signup_title": {
+      "type": "text",
+      "label": "订阅区标题",
+      "default": "",
+      "placeholder": "订阅更新",
+      "description": "页脚订阅框标题，留空用默认多语言文案",
+      "group": "订阅"
+    },
+    "email_signup_description": {
+      "type": "text",
+      "label": "订阅区描述",
+      "default": "",
+      "placeholder": "新文章发布时，第一时间推送到你的邮箱",
+      "description": "页脚订阅框副标题，留空用默认多语言文案",
+      "group": "订阅"
+    },
+    "about_card_title": {
+      "type": "text",
+      "label": "介绍版块标题",
+      "default": "",
+      "placeholder": "关于本站",
+      "description": "留空则使用默认多语言文案",
+      "group": "站点介绍"
+    },
+    "about_card_text": {
+      "type": "textarea",
+      "label": "介绍正文",
+      "default": "",
+      "placeholder": "介绍你自己、这个网站的初衷、内容方向……",
+      "description": "填写后前台会显示「站点介绍」版块；留空则整块不显示",
+      "group": "站点介绍"
+    },
+    "about_card_link": {
+      "type": "text",
+      "label": "介绍链接",
+      "default": "",
+      "placeholder": "/about",
+      "description": "可选。「了解更多」按钮指向的链接，留空则不显示按钮",
+      "group": "站点介绍"
+    },
+    "about_card_link_label": {
+      "type": "text",
+      "label": "链接按钮文案",
+      "default": "",
+      "placeholder": "了解更多 →",
+      "description": "留空使用默认多语言文案",
+      "group": "站点介绍"
+    }
+  },
+  "home_sections": [
+    {
+      "type": "hero",
+      "label": "首屏标题",
+      "settings": {}
+    },
+    {
+      "type": "search",
+      "label": "搜索框",
+      "settings": {}
+    },
+    {
+      "type": "featured",
+      "label": "精选文章",
+      "settings": {
+        "show_desc": {
+          "type": "select",
+          "label": "显示摘要",
+          "options": [
+            "显示",
+            "隐藏"
+          ],
+          "default": "显示"
+        }
+      }
+    },
+    {
+      "type": "topics",
+      "label": "主题导航",
+      "settings": {
+        "count": {
+          "type": "select",
+          "label": "显示数量",
+          "options": [
+            "5",
+            "10",
+            "20"
+          ],
+          "default": "10"
+        }
+      }
+    },
+    {
+      "type": "series_banner",
+      "label": "连载推荐",
+      "settings": {}
+    },
+    {
+      "type": "latest",
+      "label": "最新文章",
+      "settings": {
+        "count": {
+          "type": "select",
+          "label": "文章数量",
+          "options": [
+            "3",
+            "6",
+            "9"
+          ],
+          "default": "6"
+        }
+      }
+    },
+    {
+      "type": "newsletter",
+      "label": "订阅框",
+      "settings": {}
+    }
+  ]
+}

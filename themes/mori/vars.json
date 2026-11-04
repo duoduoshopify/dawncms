@@ -1,0 +1,8 @@
+{
+  "paper": "#f4f6f0", "card": "#fafbf7", "wash": "#e9ede2",
+  "ink": "#26302a", "ink_soft": "#37443c", "ink_2": "#52615a",
+  "hairline": "#dde3d4", "hairline_soft": "#e7ebe0", "hairline_strong": "#c3cbb6",
+  "accent": "#3f6a4e", "accent_deep": "#2f5340", "accent_soft": "#e4ede5",
+  "accent_rgb": "63,106,78", "code_text": "#2f5340",
+  "tag_bg": "#e9ede2", "tag_text": "#5d6a60"
+}

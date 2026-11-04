@@ -1,0 +1,9 @@
+/* OwenBoker 列表页：无边框封面流 */
+.masthead { background: transparent; }
+.card-title { transition: opacity .2s ease; }
+.group:hover .card-title { opacity: .8; }
+.feature-grid { align-items: stretch; }
+.feature-cover { aspect-ratio: 16/9; }
+.list-cover { aspect-ratio: 16/9; }
+.cover-img { transition: transform .4s ease; }
+.group:hover .cover-img { transform: scale(1.05); }

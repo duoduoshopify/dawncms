@@ -1,0 +1,83 @@
+/* OwenBoker 文章正文（Tailwind Typography 基准） */
+.doc-shell{min-height:100vh}
+.doc-progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-deep));z-index:60;transition:width .12s linear}
+.doc-col{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto}
+.doc-col::-webkit-scrollbar{width:4px}
+.doc-col::-webkit-scrollbar-thumb{background:rgba(var(--muted-rgb),.35);border-radius:999px}
+.doc-main{min-width:0}
+.doc-content{font-family:var(--doc-font);font-size:1.06rem;line-height:1.8;color:var(--ink-soft)}
+
+/* 链接：weight 500 + 2px accent 下划线 */
+.doc-content a{color:var(--ink);font-weight:500;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;text-decoration-color:var(--accent)}
+.doc-content a:hover{color:var(--accent)}
+.doc-content a strong{color:inherit}
+.doc-content code a,.doc-content pre a{color:inherit;text-decoration:none}
+
+/* 加粗 */
+.doc-content strong{color:var(--ink);font-weight:600}
+.doc-content blockquote strong,.doc-content thead th strong{color:inherit}
+
+/* 标题：无装饰竖条，纯字重层级（prose 基准） */
+.doc-content h2{font-size:1.55rem;font-weight:700;color:var(--ink);margin:2em 0 .85em;line-height:1.35}
+.doc-content h3{font-size:1.28rem;font-weight:600;color:var(--ink);margin:1.6em 0 .7em;line-height:1.4}
+.doc-content h4{font-size:1.06rem;font-weight:600;color:var(--ink);margin:1.4em 0 .6em;line-height:1.5}
+.doc-content h2 strong{font-weight:800;color:inherit}
+.doc-content h3 strong,.doc-content h4 strong{font-weight:700;color:inherit}
+
+/* 段落与列表 */
+.doc-content p{color:var(--ink-soft);line-height:1.8;margin:1.25em 0}
+.doc-content ul,.doc-content ol{color:var(--ink-soft);line-height:1.8;margin:1.25em 0;padding-left:1.5rem}
+.doc-content ul{list-style-type:disc}
+.doc-content ol{list-style-type:decimal}
+.doc-content li{margin:.4em 0}
+.doc-content ol>li::marker{color:var(--muted);font-weight:400}
+.doc-content ul>li::marker{color:var(--faint)}
+
+/* 引用：斜体 + 灰边 + 引号（非色块） */
+.doc-content blockquote{font-weight:500;font-style:italic;color:var(--ink-2);border-left:.25rem solid var(--hairline-strong);background:none;padding:.1rem 0 .1rem 1.2rem;margin:1.6em 0;border-radius:0}
+.doc-content blockquote p{margin:.8em 0}
+
+/* 行内代码：反引号伪元素 + 无底色（prose 基准） */
+.doc-content code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink);font-weight:600;font-size:.88em;background:none;padding:0;border-radius:0}
+.doc-content code::before{content:"`"}
+.doc-content code::after{content:"`"}
+.doc-content pre code::before,.doc-content pre code::after{content:none}
+.doc-content h2 code,.doc-content h3 code,.doc-content h4 code{color:inherit}
+.doc-content a code{color:inherit}
+
+/* 代码块（外壳由 prism.css 的 .md-code-block 负责） */
+.doc-content pre{background:#0d1117;border-radius:.5rem;padding:1rem 1.25rem;overflow:auto;margin:1.6rem 0}
+.doc-content pre code{background:none;padding:0;color:#c9d1d9;font-weight:400}
+
+/* 表格：prose 式（下边框，无斑马底） */
+.doc-content table{width:100%;border-collapse:collapse;margin:1.6em 0;font-size:.92rem}
+.doc-content thead th{color:var(--ink);font-weight:600;text-align:left;padding:.6rem .75rem;background:none;border:none;border-bottom:2px solid var(--hairline-strong)}
+.doc-content td{padding:.6rem .75rem;border:none;border-bottom:1px solid var(--hairline);color:var(--ink-soft)}
+
+/* 图片与分隔线 */
+.doc-content img{max-width:100%;border-radius:.5rem;margin:2em auto;border:none;display:block}
+.doc-content figure{margin:2em 0}
+.doc-content figcaption{color:var(--muted);text-align:center;font-size:.875rem;margin-top:.6em}
+.doc-content hr{border:0;border-top:1px solid var(--hairline);margin:2.6em 0;width:100%}
+
+/* CTA / 嵌入块（平台自有扩展，保留） */
+.doc-content .md-cta{margin:1.9rem 0;padding:1.5rem 1.6rem;border-radius:.5rem;box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.3);background:linear-gradient(135deg,rgba(var(--accent-rgb),.07),rgba(var(--accent-rgb),.02))}
+.doc-content .md-cta-title{font-size:1.05rem;font-weight:700;color:var(--ink)}
+.doc-content .md-cta-desc{font-size:.95rem;color:var(--ink-2);margin-top:.5rem}
+.doc-content .md-cta-btn{display:inline-block;margin-top:1rem;padding:.65rem 1.4rem;border-radius:.5rem;background:var(--accent);color:#fff;text-decoration:none;font-weight:600}
+.doc-content .md-cta-btn:hover{background:var(--accent-deep);color:#fff}
+
+/* TOC */
+.toc-link{display:block;font-size:.84rem;color:var(--muted);padding:.35rem .6rem;border-radius:6px;border-left:2px solid transparent}
+.toc-link:hover{color:var(--ink);background:rgba(var(--ink-rgb),.04)}
+.toc-link.active{color:var(--accent);border-left-color:var(--accent);background:rgba(var(--accent-rgb),.06)}
+.toc-h3{padding-left:1.5rem;font-size:.78rem}
+.doc-content h2[id],.doc-content h3[id]{scroll-margin-top:88px}
+html{scroll-behavior:smooth}
+.doc-shell{overflow:visible !important}
+.doc-main,.doc-content{min-width:0}
+.doc-content{overflow-wrap:anywhere;word-break:break-word}
+.doc-content table{display:block;max-width:100%;overflow-x:auto}
+.doc-content iframe,.doc-content video,.doc-content .md-embed,.doc-content .md-code-block,.doc-content pre{max-width:100%}
+.doc-content .md-embed iframe,.doc-content .md-embed video{display:block;width:100%;min-height:240px;border:0;background:#0d1117;border-radius:.5rem}
+@media (max-width:767px){.doc-shell{overflow-x:hidden !important}.doc-content{font-size:1rem}.doc-content .md-embed iframe,.doc-content .md-embed video{min-height:200px}}

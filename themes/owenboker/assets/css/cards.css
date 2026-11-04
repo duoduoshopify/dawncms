@@ -1,0 +1,47 @@
+/* OwenBoker 编辑器卡片（bookmark/callout/toggle/button/gallery/header） */
+.doc-content .md-card { margin: 2em 0; }
+
+/* Bookmark：链接卡片（内容 + 右侧封面） */
+.doc-content .md-bookmark { margin: 2em 0; }
+.doc-content .md-bookmark-container { display: flex; align-items: stretch; min-height: 120px; border-radius: .5rem; box-shadow: inset 0 0 0 1px var(--hairline); text-decoration: none !important; font-weight: 400; overflow: hidden; background: var(--card); transition: box-shadow .2s ease; }
+.doc-content .md-bookmark-container:hover { box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+.doc-content .md-bookmark-content { flex: 1; min-width: 0; padding: 1.1rem 1.3rem; display: flex; flex-direction: column; justify-content: center; }
+.doc-content .md-bookmark-title { color: var(--ink); font-weight: 600; font-size: 1rem; line-height: 1.5; }
+.doc-content .md-bookmark-desc { color: var(--muted); font-size: .875rem; line-height: 1.6; margin-top: .4rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.doc-content .md-bookmark-meta { margin-top: .8rem; font-size: .78rem; color: var(--faint); }
+.doc-content .md-bookmark-thumb { flex: none; width: 33%; max-width: 220px; }
+.doc-content .md-bookmark-thumb img { width: 100%; height: 100%; object-fit: cover; margin: 0; border-radius: 0; display: block; }
+
+/* Callout：图标 + 内容横排 */
+.doc-content .md-callout { display: flex; gap: .9rem; padding: 1.1rem 1.3rem; border-radius: .5rem; background: var(--wash); }
+.doc-content .md-callout-icon { flex: none; font-size: 1.15rem; line-height: 1.6; }
+.doc-content .md-callout-content { flex: 1; min-width: 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.75; }
+.doc-content .md-callout-content code { background: rgba(var(--ink-rgb),.06); }
+
+/* Toggle：折叠块 */
+.doc-content .md-toggle { border-radius: .5rem; box-shadow: inset 0 0 0 1px var(--hairline); padding: 0; }
+.doc-content .md-toggle summary { cursor: pointer; list-style: none; padding: 1rem 1.3rem; font-weight: 600; color: var(--ink); display: flex; align-items: center; }
+.doc-content .md-toggle summary::-webkit-details-marker { display: none; }
+.doc-content .md-toggle summary::after { content: ""; margin-left: auto; width: .5rem; height: .5rem; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .2s ease; }
+.doc-content .md-toggle[open] summary::after { transform: rotate(225deg); }
+.doc-content .md-toggle-content { padding: 0 1.3rem 1.1rem; color: var(--ink-soft); font-size: .95rem; line-height: 1.75; }
+
+/* Button：居中按钮 */
+.doc-content .md-button { text-align: center; }
+.doc-content .md-button-btn { display: inline-block; padding: .7rem 1.8rem; border-radius: .5rem; background: var(--accent); color: #fff !important; font-weight: 600; text-decoration: none !important; }
+.doc-content .md-button-btn:hover { background: var(--accent-deep); color: #fff; }
+
+/* Gallery：多图网格 */
+.doc-content .md-gallery { display: grid; gap: .6rem; }
+.doc-content .md-gallery-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.doc-content .md-gallery-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.doc-content .md-gallery-item { margin: 0; }
+.doc-content .md-gallery-item img { width: 100%; height: 100%; object-fit: cover; margin: 0; border-radius: .375rem; }
+.doc-content .md-gallery-item figcaption { font-size: .8rem; }
+@media (max-width: 640px) { .doc-content .md-gallery-cols-3 { grid-template-columns: repeat(2, 1fr); } }
+
+/* Header 卡：大横幅 */
+.doc-content .md-header { padding: min(8vmax, 120px) 2rem; border-radius: .5rem; text-align: center; background: var(--wash); }
+.doc-content .md-header-title { font-size: 2rem; font-weight: 800; color: var(--ink); margin: 0; letter-spacing: -.02em; }
+.doc-content .md-header-desc { color: var(--muted); margin: .8em auto 0; max-width: 40em; }
+.doc-content .md-header-btn { display: inline-block; margin-top: 1.6rem; padding: .7rem 1.8rem; border-radius: .5rem; background: var(--accent); color: #fff !important; font-weight: 600; text-decoration: none !important; }

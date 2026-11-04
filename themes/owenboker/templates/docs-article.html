@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block head %}
+<meta property="og:type" content="article">
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+{% endblock %}
+{% block content %}
+<div class="doc-shell">
+  <div class="doc-progress"></div>
+
+  <div class="lg:hidden flex items-center w-full h-10 text-xs border-b border-[var(--hairline)] px-5">
+    <a href="{{ docs_base }}/docs" class="flex-none text-[var(--muted)] hover:text-[var(--accent)]">{{ t('docs_center', '文档中心') }}</a>
+    <span class="mx-2 text-[var(--hairline-strong)]">/</span>
+    <span class="truncate font-semibold text-[var(--ink)]">{{ doc.title }}</span>
+  </div>
+
+  <div class="max-w-[1366px] w-full mx-auto px-5 xl:px-10">
+    <div class="flex relative">
+      <div class="hidden lg:block absolute top-0 left-0 h-full w-screen -translate-x-full">
+        <div class="sticky top-20 w-full h-[calc(100vh-5rem)] bg-[var(--wash)]"></div>
+      </div>
+
+      <nav class="hidden lg:block flex-none w-72 pr-6 py-14 relative">
+        <div class="sticky top-32 max-h-[calc(100vh-10rem)] overflow-y-auto">
+          <a href="{{ docs_base }}/docs" class="block text-xs text-[var(--faint)] hover:text-[var(--accent)] mb-5">← {{ t('docs_center', '文档中心') }}</a>
+          <h2 class="text-xs uppercase font-bold tracking-wider mb-3 text-[var(--ink)]">{{ t('docs_series', '主题开发') }}</h2>
+          <ul class="space-y-1 text-sm">
+            {% for d in docs_items %}
+            <li>
+              <a href="{{ docs_base }}/docs/{{ d.slug }}" class="flex items-baseline gap-2 py-1.5 px-2 -mx-2 rounded-md transition-colors {% if d.slug == doc.slug %}text-[var(--accent)] font-semibold bg-[var(--accent-soft)]{% else %}text-[var(--ink-2)] hover:text-[var(--accent)]{% endif %}">
+                <span class="text-[var(--faint)] font-mono text-[11px]">{{ d.num }}</span>
+                <span class="flex-1">{{ d.title }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </nav>
+
+      <div class="relative flex flex-col flex-auto min-w-0 py-10 lg:py-14">
+        <div class="grid grid-cols-1 {% if toc %}gap-10 xl:grid-cols-[minmax(0,1fr)_224px] xl:gap-16{% endif %}">
+          <div class="flex-auto min-w-0 px-0 lg:pl-8 xl:pl-16 doc-main">
+            <article class="overflow-x-hidden max-w-3xl mx-auto">
+              <header>
+                <span class="block text-sm font-medium text-[var(--accent)] mt-0 mb-1">PART {{ doc.num }}</span>
+                <h1 class="text-4xl leading-tight tracking-tight font-extrabold text-[var(--ink)]">{{ doc.title }}</h1>
+                {% if doc.desc %}<p class="mt-5 text-xl leading-8 text-[var(--muted)]">{{ doc.desc }}</p>{% endif %}
+              </header>
+              <div class="doc-content mt-8">{{ doc_html|safe }}</div>
+
+              <div class="flex flex-col sm:flex-row gap-4 mt-14 pt-8 border-t border-[var(--hairline)]">
+                {% if prev_doc %}
+                <a href="{{ docs_base }}/docs/{{ prev_doc.slug }}" class="flex basis-1/2 items-center p-4 border border-[var(--hairline)] rounded-md hover:border-[var(--accent)] transition-colors">
+                  <svg class="w-5 h-5 mr-4 flex-none text-[var(--muted)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8H3m4-4-4 4 4 4"/></svg>
+                  <div class="flex flex-col w-full">
+                    <span class="text-xs text-[var(--muted)]">{{ t('prev_post', '上一篇') }}</span>
+                    <span class="text-sm font-semibold text-[var(--ink-2)] truncate">{{ prev_doc.title }}</span>
+                  </div>
+                </a>
+                {% else %}<div class="basis-1/2"></div>{% endif %}
+                {% if next_doc %}
+                <a href="{{ docs_base }}/docs/{{ next_doc.slug }}" class="flex basis-1/2 items-center p-4 border border-[var(--hairline)] rounded-md hover:border-[var(--accent)] transition-colors">
+                  <div class="flex flex-col w-full text-right">
+                    <span class="text-xs text-[var(--muted)]">{{ t('next_post', '下一篇') }}</span>
+                    <span class="text-sm font-semibold text-[var(--ink-2)] truncate">{{ next_doc.title }}</span>
+                  </div>
+                  <svg class="w-5 h-5 ml-4 flex-none text-[var(--muted)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16h14m-4-4 4 4-4 4"/></svg>
+                </a>
+                {% else %}<div class="basis-1/2"></div>{% endif %}
+              </div>
+            </article>
+          </div>
+
+          {% if toc %}
+          <div class="hidden xl:block">
+            <div class="sticky top-32 flex-none w-56 max-h-[calc(100vh-12rem)]">
+              <h2 class="text-xs uppercase font-bold tracking-wider mb-3 text-[var(--ink)]">{{ t('on_this_page', '本页目录') }}</h2>
+              <nav class="relative text-xs leading-4 overflow-auto max-h-[calc(100vh-12rem)] text-[var(--muted)]">
+                {% for tg in toc %}
+                <a href="#{{ tg.anchor }}" data-anchor="{{ tg.anchor }}" class="{{ 'toc-link toc-h2' if tg.level == '2' else 'toc-link toc-h3' }}">{{ tg.text }}</a>
+                {% endfor %}
+              </nav>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}{% if doc_js %}<script>{{ doc_js|safe }}</script>{% endif %}{% endblock %}

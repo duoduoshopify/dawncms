@@ -1,0 +1,13 @@
+{% set sec_count = (sec.settings.count or '10')|int %}
+{% if cats %}
+<div class="mt-14 pt-10 border-t border-[var(--hairline)]">
+  <p class="text-sm text-[var(--muted)] mb-6">{{ t('topics_label', '主题') }}</p>
+  <div class="flex flex-wrap gap-3">
+    {% for c in cats[:sec_count] %}
+    <a href="{{ c.url }}" class="inline-flex items-center h-10 px-4 rounded-full ring-1 ring-[var(--hairline-strong)] ring-inset text-sm font-medium text-[var(--ink-2)] hover:ring-[var(--accent)] hover:text-[var(--accent)]">
+      {{ c.name }}<span class="ml-2 text-xs text-[var(--faint)]">{{ c.count }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

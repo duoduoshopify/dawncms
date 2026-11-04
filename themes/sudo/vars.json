@@ -1,0 +1,13 @@
+{
+  "paper": "#0a0d0b", "card": "#10140f", "wash": "#151a14",
+  "ink": "#e3f0e1", "ink_soft": "#cfe0cc", "ink_2": "#a8bba3",
+  "muted": "#7d8f7a", "faint": "#5a6b56", "ghost": "#33402f",
+  "hairline": "#1e2a1c", "hairline_soft": "#18211a", "hairline_strong": "#2c3b28",
+  "accent": "#4ade80", "accent_deep": "#22c55e", "accent_soft": "#122419",
+  "accent_rgb": "74,222,128", "ink_rgb": "227,240,225", "muted_rgb": "125,143,122",
+  "serif": "ui-monospace,'SF Mono','Cascadia Code','JetBrains Mono',Menlo,Consolas,'PingFang SC','Microsoft YaHei',monospace",
+  "doc_font": "-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue','Microsoft YaHei',sans-serif",
+  "code_bg": "#151a14", "code_text": "#4ade80",
+  "hl_yellow": "#2a2a12", "hl_green": "#14261a", "hl_red": "#2a1512", "hl_purple": "#1e1830",
+  "tag_bg": "#151a14", "tag_text": "#8fae86"
+}

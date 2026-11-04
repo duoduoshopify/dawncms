@@ -1,0 +1,29 @@
+<footer class="mt-16 hairline-b border-t border-[var(--hairline)]">
+  <div class="max-w-[1200px] mx-auto px-6 py-12">
+    <div class="term-window max-w-xl mx-auto">
+      <div class="term-bar">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="term-bar-title">visitor@{{ site_name }}: ~/subscribe</span>
+      </div>
+      <div class="term-body !p-6">
+        <p class="ff-mono text-sm text-[var(--muted)] mb-1"><span class="text-[var(--accent)] font-bold">$</span> tail -f updates.log</p>
+        <p class="ff-mono text-[var(--ink)] font-bold text-lg mb-1">{{ theme_settings.email_signup_title or t('subscribe_title', '订阅更新') }}</p>
+        <p class="text-[var(--muted)] text-xs mb-5">{{ theme_settings.email_signup_description or t('subscribe_sub', '新文章发布时，第一时间推送到你的邮箱') }}</p>
+        <form method="post" action="/subscribe" class="flex items-center">
+          <span class="ff-mono text-[var(--accent)] font-bold mr-2 flex-none">›</span>
+          <input type="email" name="email" required placeholder="you@example.com" class="flex-1 min-w-0 px-4 py-2.5 rounded-md border border-[var(--hairline-strong)] text-sm focus:outline-none">
+          <button type="submit" class="ml-2 px-5 py-2.5 rounded-md bg-[var(--accent)] text-[#0a0d0b] ff-mono text-sm font-bold hover:bg-[var(--accent-deep)] shrink-0">{{ t('subscribe_btn', '订阅') }}</button>
+        </form>
+      </div>
+    </div>
+    {% if footer_nav %}
+    <div class="flex items-center justify-center gap-7 mt-10 mb-5 ff-mono">
+      {% for n in footer_nav %}<a href="{{ n.url }}" class="text-[var(--muted)] hover:text-[var(--accent)] text-xs">{{ n.label }}</a>{% endfor %}
+    </div>
+    {% endif %}
+    <p class="ff-mono text-[var(--faint)] text-xs text-center">
+      <span class="text-[var(--accent)]">$</span> exit <span class="mx-1">·</span> logout… session closed
+    </p>
+    <p class="ff-mono text-[var(--faint)] text-xs text-center mt-2">© {{ year }} {{ site_name }} <span class="mx-1">·</span> {{ t('tagline', site_tagline) }} <span class="mx-1 opacity-60">·</span> <span class="opacity-70">Powered by <strong class="font-bold">DawnCMS</strong></span></p>
+  </div>
+</footer>

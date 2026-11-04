@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-[720px] mx-auto px-6 py-24">
+  <div class="rounded-2xl border border-[var(--hairline)] bg-[var(--card)] p-10 md:p-14 text-center shadow-sm">
+    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold text-[var(--accent)] border border-[var(--accent)]/40 mb-6">{{ t('err_eyebrow', '章节缺失') }}</span>
+    <h1 class="ff-serif text-7xl md:text-8xl font-black text-[var(--ink)] leading-none mb-5">{{ error_code }}</h1>
+    <p class="ff-serif text-xl font-bold text-[var(--ink)] mb-4">{% if error_code == 404 %}{{ t('err404_title', error_title) }}{% else %}{{ t('err500_title', error_title) }}{% endif %}</p>
+    <p class="text-[var(--muted)] leading-relaxed mb-10">{% if error_code == 404 %}{{ t('err404_desc', error_message) }}{% else %}{{ t('err500_desc', error_message) }}{% endif %}</p>
+    <div class="flex items-center justify-center">
+      <a href="/" class="btn-primary">{{ t('back_home', '返回首页') }}</a>
+      <a href="/docs" class="btn-secondary ml-3">{{ t('err_docs', '浏览文档') }}</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

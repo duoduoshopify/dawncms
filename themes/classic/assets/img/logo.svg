@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="DawnCMS Logo">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#1e40af"/>
+    </linearGradient>
+  </defs>
+  <rect width="96" height="96" rx="22" fill="url(#g)"/>
+  <path fill-rule="evenodd" fill="#ffffff" transform="translate(-3,0)"
+        d="M30 24h17c15 0 25 10.5 25 24S62 72 47 72H30V24zm12 13v22h4.5c7.5 0 12-4.6 12-11s-4.5-11-12-11H42z"/>
+</svg>

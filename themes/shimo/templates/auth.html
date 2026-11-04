@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto px-6 py-20">
+  <a href="/" class="block text-center text-sm text-[var(--faint)] hover:text-[var(--accent)] mb-6">{{ auth_back_label or t('back_home', '← 返回首页') }}</a>
+  <div class="p-8 rounded-2xl border border-[var(--hairline)] bg-[var(--card)]">
+    <h1 class="ff-serif text-2xl font-black text-[var(--ink)] mb-6 text-center">{{ auth_title }}</h1>
+    {% if auth_error %}
+    <div class="mb-5 px-4 py-3 rounded-lg text-sm font-semibold bg-[var(--accent-soft)] text-[var(--accent-deep)] border border-[var(--hairline)]">{{ auth_error }}</div>
+    {% endif %}
+    <form method="post" action="{{ auth_action }}">
+      {% for f in auth_fields %}
+      {% if f.type == 'hidden' %}
+      <input type="hidden" name="{{ f.name }}" value="{{ f.value or '' }}">
+      {% else %}
+      <div class="mb-4">
+        <label class="block text-[var(--ink-2)] text-xs font-bold mb-1.5" for="auth-{{ f.name }}">{{ f.label }}</label>
+        <input id="auth-{{ f.name }}" type="{{ f.type or 'text' }}" name="{{ f.name }}"
+               {% if f.required %}required{% endif %}{% if f.minlength %} minlength="{{ f.minlength }}"{% endif %}{% if f.value %} value="{{ f.value }}"{% endif %}
+               class="w-full px-4 py-3 rounded-lg bg-[var(--paper)] border border-[var(--hairline)] text-[var(--ink-soft)] text-sm focus:outline-none focus:border-[var(--accent)]">
+      </div>
+      {% endif %}
+      {% endfor %}
+      <button type="submit" class="btn-primary w-full mt-2">{{ auth_button }}</button>
+    </form>
+    {% for tip in auth_tips %}
+    <p class="text-[var(--faint)] text-sm text-center mt-4">{{ tip.text }}
+      {% if tip.link_url %}<a href="{{ tip.link_url }}" class="text-[var(--accent)] hover:text-[var(--accent-deep)]">{{ tip.link_text }}</a>{% endif %}
+    </p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

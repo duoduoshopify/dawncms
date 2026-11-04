@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-[760px] mx-auto px-6 py-28 text-center">
+  <span class="eyebrow block mb-5">{{ t('err_eyebrow', site_name ~ ' · 寻页') }}</span>
+  <h1 class="ff-serif text-8xl md:text-9xl font-black text-[var(--accent)] leading-none mb-6">{{ error_code }}</h1>
+  <p class="ff-serif text-2xl font-bold text-[var(--ink)] mb-4">{% if error_code == 404 %}{{ t('err404_title', error_title) }}{% else %}{{ t('err500_title', error_title) }}{% endif %}</p>
+  <p class="text-[var(--muted)] leading-relaxed mb-3">{% if error_code == 404 %}{{ t('err404_desc', error_message) }}{% else %}{{ t('err500_desc', error_message) }}{% endif %}</p>
+  <p class="ff-serif text-[var(--faint)] text-sm mb-12">{{ t('err404_poem', '访古寻幽，此处无篇。许是山深路远，墨迹未干。') }}</p>
+  <div class="flex items-center justify-center">
+    <a href="/" class="btn-primary">{{ t('back_home', '返回首页') }}</a>
+    <a href="/docs" class="btn-secondary ml-3">{{ t('err_docs', '浏览文档') }}</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+# 密钥与配置（绝不上传）
+.env
+.sesskey
+
+# 虚拟环境
+venv/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 运行期数据（代码仓库不含站点内容与日志）
+database/*.db
+server.log
+
+# 用户上传的媒体文件
+static/uploads/

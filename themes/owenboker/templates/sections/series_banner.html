@@ -1,0 +1,20 @@
+{% if series_groups %}
+{% set sg = series_groups[0] %}
+<div class="mt-14 pt-10 border-t border-[var(--hairline)]">
+  <div class="rounded-xl bg-[var(--wash)] ring-1 ring-[var(--hairline)] ring-inset px-6 py-8 sm:px-10 sm:py-10">
+    <p class="text-sm font-semibold text-[var(--accent)] mb-3">{{ t('series_label', '连载') }}</p>
+    <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-[var(--ink)]">{{ sg.name }}</h3>
+    <ol class="mt-6 space-y-2.5">
+      {% for sp in sg.posts[:5] %}
+      <li>
+        <a href="{{ sp.url }}" class="group flex items-baseline gap-3 text-sm">
+          <span class="text-[var(--accent)] font-bold w-6 flex-none">{{ "%02d" % loop.index }}</span>
+          <span class="text-[var(--ink-2)] group-hover:text-[var(--ink)] truncate">{{ sp.title }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+    <a href="{{ sg.url }}" class="inline-block mt-6 text-sm font-semibold text-[var(--accent)] hover:opacity-80">{{ t('series_view_all', '查看整个连载 →') }}</a>
+  </div>
+</div>
+{% endif %}

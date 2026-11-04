@@ -1,0 +1,26 @@
+<a href="{{ p.url }}" class="block group h-full">
+  <div class="term-card h-full flex flex-col">
+    <div class="term-card-bar">
+      <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+      <span class="term-path">./posts/{{ p.category or 'uncategorized' }}.md</span>
+      {% if p.member %}<span class="ml-auto ff-mono text-[10px] text-[var(--accent)] border border-[var(--accent)]/40 rounded px-1.5 py-0.5 flex-none">{{ t('member_badge', '会员') }}</span>{% endif %}
+    </div>
+    <div class="list-cover w-full overflow-hidden">
+      <img src="{{ p.cover }}" alt="{{ p.title }}" loading="lazy" class="w-full h-full object-cover cover-img">
+    </div>
+    <div class="p-5 flex flex-col flex-1">
+      <h3 class="card-title text-[17px] font-bold text-[var(--ink)] leading-snug mb-2 line-clamp-2 group-hover:text-[var(--accent)]">{{ p.title }}</h3>
+      <p class="text-[var(--muted)] text-sm leading-relaxed line-clamp-2">{{ p.desc }}</p>
+      {% if p.tags %}
+      <div class="flex flex-wrap gap-1.5 mt-3 ff-mono">
+        {% for tag in p.tags %}<span class="inline-block px-2 py-0.5 text-[var(--tag-text)] text-[11px] rounded bg-[var(--tag-bg)]">#{{ tag.name }}</span>{% endfor %}
+      </div>
+      {% endif %}
+      <div class="ff-mono flex items-center text-[var(--faint)] text-[11px] mt-4 pt-3 border-t border-[var(--hairline-soft)]">
+        <span class="mr-4">{{ p.date }}</span>
+        <span class="mr-4">{{ p.read_time }}</span>
+        <span>{{ t('views_fmt', '{n} 阅读').replace('{n}', p.views|string) }}</span>
+      </div>
+    </div>
+  </div>
+</a>

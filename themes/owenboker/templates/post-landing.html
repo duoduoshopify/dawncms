@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block head %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ a.title }}">
+<meta property="og:description" content="{{ a.desc }}">
+{% if a.cover_abs %}<meta property="og:image" content="{{ a.cover_abs }}">{% endif %}
+<style>html{scroll-behavior:smooth}</style>
+{% endblock %}
+{% block content %}
+{# post-landing：全宽营销页正文，无侧栏无 TOC，渐入动画 #}
+<article class="max-w-3xl mx-auto px-5 py-16 sm:py-24">
+  <header class="text-center mb-12" data-sal>
+    <span class="block text-sm font-medium text-[var(--accent)] mb-2">{{ a.category }}</span>
+    <h1 class="text-4xl sm:text-5xl leading-tight tracking-tight font-extrabold text-[var(--ink)]">{{ a.title }}</h1>
+    {% if a.desc %}<p class="mt-6 text-xl leading-8 text-[var(--muted)]">{{ a.desc }}</p>{% endif %}
+  </header>
+  {% if a.cover %}
+  <div class="dc-cover aspect-[16/9] mb-12" data-sal>
+    <img src="{{ a.cover }}" alt="{{ a.title }}" class="w-full h-full object-cover">
+  </div>
+  {% endif %}
+  <div class="doc-content">{{ content|safe }}</div>
+</article>
+{% endblock %}
+{% block scripts %}
+<style>
+[data-sal]{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+[data-sal].sal-on{opacity:1;transform:none}
+</style>
+<script>
+(function(){
+  var els = document.querySelectorAll('[data-sal]');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(e){e.classList.add('sal-on')}); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('sal-on'); io.unobserve(en.target); } });
+  }, { threshold: 0.1 });
+  els.forEach(function(e){ io.observe(e); });
+  document.querySelectorAll('.doc-content > *').forEach(function(e, i){
+    e.setAttribute('data-sal',''); io.observe(e);
+  });
+})();
+</script>
+{% endblock %}

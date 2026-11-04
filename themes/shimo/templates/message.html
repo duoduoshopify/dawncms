@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto px-6 py-24 text-center">
+  <div class="p-8 rounded-2xl border border-[var(--hairline)] bg-[var(--card)]">
+    <h1 class="ff-serif text-2xl font-black text-[var(--ink)] mb-4">{{ message_title }}</h1>
+    {% if message_body %}<p class="text-[var(--ink-2)] text-sm leading-relaxed mb-6">{{ message_body }}</p>{% endif %}
+    <a href="{{ message_link_url or '/' }}" class="text-[var(--accent)] hover:text-[var(--accent-deep)] text-sm font-bold">{{ message_link_text or t('back_home', '返回首页') }}</a>
+  </div>
+</div>
+{% endblock %}

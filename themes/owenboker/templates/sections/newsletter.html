@@ -1,0 +1,10 @@
+<div class="mt-14 pt-10 border-t border-[var(--hairline)]">
+  <div class="rounded-xl ring-1 ring-[var(--hairline-strong)] ring-inset px-6 py-10 sm:px-12 text-center">
+    <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-[var(--ink)]">{{ theme_settings.email_signup_title or t('subscribe_title', '订阅更新') }}</h3>
+    <p class="mt-2 text-sm text-[var(--muted)]">{{ theme_settings.email_signup_description or t('subscribe_sub', '新文章发布时，第一时间推送到你的邮箱') }}</p>
+    <form method="post" action="/subscribe" class="flex items-center h-11 px-4 mt-6 w-full max-w-md mx-auto rounded-md ring-1 ring-[var(--hairline-strong)] ring-inset bg-[var(--paper)] focus-within:ring-[var(--accent)]">
+      <input type="email" name="email" required placeholder="{{ t('subscribe_ph', '输入你的邮箱') }}" class="flex-1 min-w-0 bg-transparent text-sm text-[var(--ink-soft)] focus:outline-none placeholder:text-[var(--faint)]">
+      <button type="submit" class="ml-3 font-bold text-sm text-[var(--accent)] hover:text-[var(--accent-deep)] shrink-0">{{ t('subscribe_btn', '订阅') }}</button>
+    </form>
+  </div>
+</div>

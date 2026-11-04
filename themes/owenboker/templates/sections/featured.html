@@ -1,0 +1,24 @@
+{% if featured %}
+<div class="mt-14 pt-10 border-t border-[var(--hairline)]">
+  <p class="text-sm text-[var(--muted)] mb-6">{{ t('featured_label', '精选') }}</p>
+  <a href="{{ featured.url }}" class="group block lg:grid lg:grid-cols-5 lg:gap-10 items-center">
+    {% if featured.cover %}
+    <div class="lg:col-span-3 dc-cover list-cover w-full mb-5 lg:mb-0 aspect-[16/9]">
+      <img src="{{ featured.cover }}" alt="{{ featured.title }}" loading="lazy" class="w-full h-full object-cover cover-img">
+    </div>
+    {% endif %}
+    <div class="{% if featured.cover %}lg:col-span-2{% endif %}">
+      {% if featured.member %}<span class="inline-block px-2 py-0.5 badge-accent text-[11px] font-semibold rounded-full mb-2">{{ t('member_badge', '会员') }}</span>{% endif %}
+      <h3 class="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--ink)] leading-snug group-hover:opacity-80">{{ featured.title }}</h3>
+      {% if featured.desc and (sec.settings.show_desc or '显示') == '显示' %}
+      <p class="mt-4 text-[var(--muted)] leading-7 line-clamp-3">{{ featured.desc }}</p>
+      {% endif %}
+      <div class="mt-4 text-sm text-[var(--faint)]">
+        <span>{{ featured.date }}</span>
+        {% if featured.category %}<span class="opacity-50 mx-1">—</span><span>{{ featured.category }}</span>{% endif %}
+      </div>
+      <span class="inline-block mt-5 text-sm font-semibold text-[var(--accent)]">{{ t('read_more', '阅读更多 →') }}</span>
+    </div>
+  </a>
+</div>
+{% endif %}

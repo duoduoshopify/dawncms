@@ -1,0 +1,32 @@
+/* baiye · 白页：白底极简、正红点缀、悬停浮起卡片、左侧分组目录 */
+body{background:#fff !important}
+.ff-serif{font-family:var(--serif) !important;letter-spacing:0}
+
+.paper-card{background:#fff;border:1px solid var(--hairline);box-shadow:none !important;
+  border-radius:12px;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.paper-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px -14px rgba(17,24,39,.22) !important;
+  border-color:var(--hairline-strong)}
+.cover-img{transition:transform .5s ease}
+.paper-card:hover .cover-img{transform:scale(1.04)}
+
+.side-group{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;
+  color:var(--ink);padding:2px 0}
+.side-group:hover{color:var(--accent)}
+.side-group.side-active{color:var(--accent)}
+.side-dot{width:6px;height:6px;border-radius:2px;background:var(--accent);flex:none}
+.side-link{display:block;padding:3px 0 3px 14px;font-size:13px;color:var(--muted);
+  border-left:1px solid var(--hairline);line-height:1.5;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-link:hover{color:var(--accent);border-left-color:var(--accent)}
+
+.doc-content h2{border-left:4px solid var(--accent)}
+.doc-content a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.doc-content blockquote{border-left:3px solid var(--accent);background:var(--accent-soft);
+  padding:.8rem 1.1rem;border-radius:0 10px 10px 0;color:var(--ink-2)}
+
+.toc-link.active{background:var(--accent-soft);color:var(--accent)}
+.doc-progress{background:var(--accent)}
+
+input[type="search"],input[type="text"],input[type="email"]{
+  border-color:var(--hairline) !important}
+input:focus{border-color:var(--accent) !important;outline:none;box-shadow:0 0 0 3px rgba(216,40,69,.12)}

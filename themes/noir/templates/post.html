@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block head %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ a.title }}">
+<meta property="og:description" content="{{ a.desc }}">
+<meta property="og:url" content="{{ canonical }}">
+{% if a.cover_abs %}<meta property="og:image" content="{{ a.cover_abs }}">{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{{ jsonld_article|safe }}</script>
+<script type="application/ld+json">{{ jsonld_breadcrumb|safe }}</script>
+<script type="application/ld+json">{{ jsonld_itemlist|safe }}</script>
+{% endblock %}
+{% block content %}
+<div class="doc-shell">
+  <div class="doc-progress"></div>
+  <div class="hairline-b">
+    <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center">
+      <a href="{{ home_url or '/' }}" class="text-[var(--faint)] hover:text-[var(--ink)] text-sm">{{ t('home', '首页') }}</a>
+      <span class="text-[var(--hairline-strong)] mx-2">/</span>
+      <a href="{{ a.category_url or ('/' + a.category_slug) }}" class="text-[var(--ink-2)] hover:text-[var(--accent)] text-sm font-medium">{{ a.category }}</a>
+      <span class="text-[var(--hairline-strong)] mx-2">/</span>
+      <span class="text-[var(--faint)] text-sm truncate max-w-[40ch]">{{ a.title }}</span>
+    </div>
+  </div>
+
+  <div class="article-grid max-w-[1200px] mx-auto px-6 py-10 grid gap-6 grid-cols-1 xl:grid-cols-[250px_minmax(0,1fr)_230px] lg:grid-cols-[minmax(0,1fr)_230px]">
+
+    <!-- 左栏：专栏导航 -->
+    <div>
+      <div class="doc-col p-4 bg-[var(--wash)] border border-[var(--hairline-soft)] rounded-xl hidden xl:block">
+        <a href="{{ home_url or '/' }}" class="block text-[13px] text-[var(--faint)] hover:text-[var(--accent)] mb-4">← {{ t('back_home', '返回首页') }}</a>
+        {% if series_block %}
+        <h4 class="text-[11px] uppercase tracking-widest text-[var(--faint)] font-bold mb-3">{{ t('series_block_title', '本篇所属连载') }}</h4>
+        <a href="{{ series_block.url or ('/series/' + series_block.slug) }}" class="flex items-center gap-2 text-[13.5px] font-bold text-[var(--ink)] hover:text-[var(--accent)] mb-2">
+          {{ series_block.name }}
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[var(--accent)] text-[var(--paper)] leading-none">{{ t('series_badge', '连载') }}</span>
+        </a>
+        <div class="mb-5 pb-4 border-b border-[var(--hairline)]">
+          {% for rp in series_block.posts %}
+          <a href="{{ rp.url }}" class="flex items-baseline text-[13px] py-[7px] px-2 rounded-lg {% if rp.current %}text-[var(--accent)] bg-[var(--accent)]/8 font-semibold{% else %}text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--wash)]{% endif %}"><span class="font-mono text-[10px] text-[var(--accent)] font-bold mr-1.5 flex-none">{{ "%02d" % loop.index }}</span><span class="min-w-0">{{ rp.title }}</span></a>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <h4 class="text-[11px] uppercase tracking-widest text-[var(--faint)] font-bold mb-4">{{ t('rail_nav', '专栏导航') }}</h4>
+        {% for c in rail_cats %}
+        <button type="button" data-target="cat-{{ c.slug }}" aria-expanded="{{ 'true' if c.open else 'false' }}"
+                class="cat-toggle w-full flex items-center justify-between text-[var(--ink-soft)] text-[13.5px] font-semibold mt-4 mb-2"
+                onclick="var t=document.getElementById(this.dataset.target);var a=this.querySelector('.cat-arrow');if(t.classList.contains('hidden')){t.classList.remove('hidden');a.textContent='▾';}else{t.classList.add('hidden');a.textContent='▸';}">
+          <span>{{ c.name }}{% if c.is_series %}<span class="ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[var(--accent)] text-[var(--paper)] leading-none">{{ t('series_badge', '连载') }}</span>{% endif %}</span>
+          <span class="cat-arrow text-xs text-[var(--faint)]">{{ '▾' if c.open else '▸' }}</span>
+        </button>
+        <div id="cat-{{ c.slug }}" class="mt-1 {{ 'block' if c.open else 'hidden' }}">
+          {% if c.posts %}
+            {% for rp in c.posts %}
+            <a href="{{ rp.url }}" class="flex items-baseline text-[13px] py-[7px] px-2 rounded-lg {% if rp.current %}text-[var(--accent)] bg-[var(--accent)]/8 font-semibold{% else %}text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--wash)]{% endif %}">{% if c.is_series %}<span class="font-mono text-[10px] text-[var(--accent)] font-bold mr-1.5 flex-none">{{ "%02d" % loop.index }}</span>{% endif %}<span class="min-w-0">{{ rp.title }}</span></a>
+            {% endfor %}
+          {% else %}
+            <p class="text-[var(--ghost)] text-xs">{{ t('no_posts', '暂无文章') }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- 中栏：正文 -->
+    <div class="w-full xl:w-auto doc-main">
+      <nav class="flex items-center flex-wrap gap-x-1.5 gap-y-1 text-xs text-[var(--muted)] mb-5" aria-label="breadcrumb">
+      <a href="{{ home_url or '/' }}" class="hover:text-[var(--accent)] transition-colors">{{ t('home', '首页') }}</a>
+      {% if a.category %}
+      <span class="text-[var(--faint)] select-none">›</span>
+      <a href="{{ a.dawn_category_url or ('/' + a.category_slug) }}" class="hover:text-[var(--accent)] transition-colors">{{ a.category }}</a>
+      {% endif %}
+      <span class="text-[var(--faint)] select-none">›</span>
+      <span class="text-[var(--ink-2)] truncate max-w-[18rem]">{{ a.title }}</span>
+    </nav>
+      <h1 class="ff-serif text-3xl md:text-[2.6rem] font-black text-[var(--ink)] mb-5 leading-snug">{{ a.title }}</h1>
+      {% if series_info %}
+      <a href="{{ series_info.url or ('/series/' + series_info.slug) }}" class="inline-flex items-center gap-1.5 mb-4 px-3 py-1 rounded-full bg-[var(--accent-soft)] text-[var(--accent)] text-xs font-semibold hover:underline">📚 {{ t('series_prefix', '连载系列：') }}{{ series_info.name }}</a>
+      {% endif %}
+
+      <div class="flex items-center gap-4 mb-8 p-4 rounded-2xl border border-[var(--hairline)] bg-[var(--card)]">
+        <div class="ff-serif w-12 h-12 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/25 text-[var(--accent)] font-black text-lg flex items-center justify-center">{{ a.author[0] }}</div>
+        <div>
+          <div class="text-[var(--ink)] font-bold text-sm">{{ a.author }}</div>
+          <div class="text-[var(--faint)] text-xs mt-1">{{ t('author_label', '内容作者') }}</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <span class="inline-block px-3 py-1 bg-[var(--accent)]/8 text-[var(--accent)] text-xs font-bold tracking-widest rounded-full mr-3">{{ a.category }}</span>
+        <span class="text-[var(--faint)] text-sm mr-3">{{ a.date }}</span>
+        <span class="text-[var(--faint)] text-sm mr-3">{{ a.read_time }}</span>
+        <span class="text-[var(--faint)] text-sm">{{ t('views_fmt', '{n} 阅读').replace('{n}', a.views|string) }}</span>
+      </div>
+
+      {% if tags %}
+      <div class="flex flex-wrap gap-1.5 mt-3">
+        {% for t in tags %}<a href="{{ t.url or ('/tag/' + t.slug) }}" class="inline-block px-2 py-0.5 text-[var(--muted)] text-[11px] rounded-full border border-[var(--hairline)] bg-white hover:text-[var(--accent)] hover:border-[var(--accent)]/40"># {{ t.name }}</a>{% endfor %}
+      </div>
+      {% endif %}
+      {% if a.cover %}
+      <div class="aspect-[21/9] overflow-hidden rounded-2xl border border-[var(--hairline-soft)] mb-8">
+        <img src="{{ a.cover }}" alt="{{ a.title }}" class="w-full h-full object-cover">
+      </div>
+      {% endif %}
+
+      {% if article_banner %}
+      <div class="mb-6 px-4 py-3 rounded-lg text-sm" style="background:var(--accent-soft,rgba(99,102,241,.08));border:1px solid var(--hairline,#e5e7eb)">{{ article_banner|safe }}</div>
+      {% endif %}
+      <div class="doc-content">{{ content|safe }}</div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12 pt-8 border-t border-[var(--hairline)]">
+        {% if prev %}
+        <a href="{{ prev.url }}" class="block">
+          <div class="p-4 border border-[var(--hairline)] rounded-xl bg-[var(--card)] hover:border-[var(--accent)]/40 transition-all">
+            <span class="text-xs text-[var(--faint)] uppercase tracking-wider block mb-2">← {{ t('prev_post', '上一篇') }}</span>
+            <h5 class="ff-serif text-[var(--ink)] text-sm font-semibold line-clamp-2">{{ prev.title }}</h5>
+          </div>
+        </a>
+        {% else %}
+        <div class="p-4 border border-[var(--hairline-soft)] rounded-xl">
+          <span class="text-xs text-[var(--faint)] uppercase tracking-wider block mb-2">← {{ t('prev_post', '上一篇') }}</span>
+          <span class="text-[var(--ghost)] text-sm">{{ t('first_post', '已经是第一篇') }}</span>
+        </div>
+        {% endif %}
+        {% if next %}
+        <a href="{{ next.url }}" class="block">
+          <div class="p-4 border border-[var(--hairline)] rounded-xl bg-[var(--card)] hover:border-[var(--accent)]/40 transition-all">
+            <span class="text-xs text-[var(--faint)] uppercase tracking-wider block mb-2 text-right">{{ t('next_post', '下一篇') }} →</span>
+            <h5 class="ff-serif text-[var(--ink)] text-sm font-semibold line-clamp-2 text-right">{{ next.title }}</h5>
+          </div>
+        </a>
+        {% else %}
+        <div class="p-4 border border-[var(--hairline-soft)] rounded-xl">
+          <span class="text-xs text-[var(--faint)] uppercase tracking-wider block mb-2 text-right">{{ t('next_post', '下一篇') }} →</span>
+          <span class="text-[var(--ghost)] text-sm block text-right">{{ t('newest_post', '已经是最新篇') }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if related %}
+      <div class="mt-4 pt-2">
+        <h3 class="ff-serif text-xl font-black text-[var(--ink)] mt-12 mb-5">{{ t('related_title', '相关文章') }}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {% for r in related %}
+          <a href="{{ r.url }}" class="block group">
+            <div class="overflow-hidden border border-[var(--hairline)] rounded-xl bg-[var(--card)] hover:border-[var(--accent)]/40 transition-all">
+              <div class="aspect-video overflow-hidden border-b border-[var(--hairline-soft)]">
+                <img src="{{ r.cover }}" alt="{{ r.title }}" loading="lazy" class="w-full h-full object-cover">
+              </div>
+              <div class="p-4">
+                <span class="text-xs text-[var(--accent)] font-bold tracking-widest">{{ r.category }}</span>
+                <h4 class="ff-serif text-[var(--ink)] font-bold mt-2 mb-2 line-clamp-2 group-hover:text-[var(--accent)]">{{ r.title }}</h4>
+                <p class="text-[var(--muted)] text-xs line-clamp-2 leading-relaxed">{{ r.desc }}</p>
+                {% if r.reasons %}
+                <div class="flex flex-wrap gap-1.5 mt-3">
+                  {% for reason in r.reasons %}<span class="inline-block text-[10px] px-2 py-0.5 rounded-full border border-[var(--hairline)] text-[var(--muted)]">{{ reason }}</span>{% endfor %}
+                </div>
+                {% endif %}
+                <div class="mt-3">
+                  <span class="text-[var(--faint)] text-xs mr-3">{{ r.read_time }}</span>
+                  <span class="text-[var(--ghost)] text-xs">{{ r.date }}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- 右栏：TOC -->
+    <div>
+      <div class="doc-col p-4 bg-[var(--wash)] border border-[var(--hairline-soft)] rounded-xl hidden lg:block">
+        <h4 class="text-[11px] uppercase tracking-widest text-[var(--faint)] font-bold mb-3">{{ t('toc_title', '本页目录') }}</h4>
+        {% if toc %}
+          {% for t in toc %}
+          <a href="#{{ t.anchor }}" data-anchor="{{ t.anchor }}" class="{{ 'toc-link toc-h2' if t.level == '2' else 'toc-link toc-h3' }}">{{ t.text }}</a>
+          {% endfor %}
+        {% else %}
+          <p class="text-[var(--ghost)] text-sm">{{ t('no_toc', '暂无目录') }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script>{{ doc_js }}</script>{% endblock %}

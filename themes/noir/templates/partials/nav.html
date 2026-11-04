@@ -1,0 +1,40 @@
+<nav class="hairline-b sticky top-0 z-50 backdrop-blur bg-[var(--paper)]/90">
+  <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center min-w-0">
+      <a href="/" class="flex items-center flex-none" title="{{ site_name }}">
+        <img src="{{ logo_url }}" alt="{{ site_name }} Logo" width="32" height="32" class="w-8 h-8 mr-2.5 rounded-lg">
+        <span class="ff-serif text-[var(--ink)] font-black text-xl tracking-wide">{{ site_name }}</span>
+      </a>
+      <div class="hidden md:flex items-center ml-10">
+        {% for n in nav %}
+        <a href="{{ n.url }}" class="text-[var(--ink-2)] hover:text-[var(--accent)] text-sm font-medium mr-7">{{ n.label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="flex items-center flex-none">
+      {% if lang_switch %}
+      <div class="relative mr-6 group">
+        <button type="button" class="flex items-center gap-1 text-[var(--ink-2)] hover:text-[var(--accent)] text-sm font-medium py-2 cursor-pointer">
+          🌐 {% for l in lang_switch %}{% if l.current %}{{ l.label }}{% endif %}{% endfor %}<span class="text-[10px] text-[var(--faint)]">▾</span>
+        </button>
+        <div class="hidden group-hover:block absolute right-0 top-full pt-1 z-50">
+          <div class="min-w-[8.5rem] py-1.5 rounded-lg border border-[var(--hairline)] bg-[var(--card,#fff)] shadow-xl">
+            {% for l in lang_switch %}
+            <a href="{{ l.url }}" class="flex items-center px-4 py-2 text-sm whitespace-nowrap {% if l.current %}font-bold text-[var(--accent)]{% else %}text-[var(--ink-2)] hover:text-[var(--accent)] hover:bg-[var(--wash)]{% endif %}">{% if l.current %}<span class="mr-1.5">✓</span>{% endif %}{{ l.label }}{% if l.code %}<span class="ml-auto pl-3 text-[10px] text-[var(--faint)] self-center">{{ l.code }}</span>{% endif %}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% if is_admin %}
+      <a href="/dadmin/logout" class="text-[var(--faint)] hover:text-[var(--ink-2)] text-sm ml-6">{{ t('logout', '退出') }}</a>
+      {% elif member_name %}
+      <span class="text-[var(--ink-2)] text-sm ml-6">👤 {{ member_name }}</span>
+      <a href="/logout" class="text-[var(--faint)] hover:text-[var(--ink-2)] text-sm ml-6">{{ t('logout', '退出') }}</a>
+      {% else %}
+      <a href="/login" class="text-[var(--ink-2)] hover:text-[var(--ink)] text-sm ml-6">{{ t('login', '登录') }}</a>
+      <a href="/register" class="ml-5 px-4 py-1.5 rounded-full bg-[var(--ink)] text-[var(--paper)] text-sm font-semibold hover:bg-[var(--accent)]">{{ t('register', '注册') }}</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

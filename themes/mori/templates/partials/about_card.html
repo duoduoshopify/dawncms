@@ -1,0 +1,10 @@
+{# 站点介绍卡：后台「外观 → 站点介绍」填写后显示；首页第 1 页 masthead 下方 #}
+{% if is_home and page == 1 and (theme_settings.about_card_text or theme_settings.about_card_title) %}
+<section class="max-w-[860px] mx-auto px-6 pt-10">
+  <div class="paper-card rounded-2xl p-7 md:p-9">
+    <span class="eyebrow block mb-3">{{ theme_settings.about_card_title or t('about_site', '关于本站') }}</span>
+    {% if theme_settings.about_card_text %}<p class="text-[var(--ink-2)] text-[15px] leading-relaxed" style="white-space:pre-line">{{ theme_settings.about_card_text }}</p>{% endif %}
+    {% if theme_settings.about_card_link %}<a href="{{ theme_settings.about_card_link }}" class="inline-block mt-4 text-sm font-semibold text-[var(--accent)] hover:opacity-80">{{ theme_settings.about_card_link_label or t('about_more', '了解更多 →') }}</a>{% endif %}
+  </div>
+</section>
+{% endif %}

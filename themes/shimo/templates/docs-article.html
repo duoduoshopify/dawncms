@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hairline-b">
+  <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center text-sm">
+    <a href="{{ docs_base }}/docs" class="text-[var(--faint)] hover:text-[var(--accent)]">{{ t('docs_center', '文档中心') }}</a>
+    <span class="text-[var(--hairline-strong)] mx-2">/</span>
+    <span class="text-[var(--muted)]">{{ doc.title }}</span>
+  </div>
+</div>
+<div class="max-w-[1200px] mx-auto px-6 py-10 grid gap-6 justify-center grid-cols-1 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_230px]">
+  <div>
+    <div class="doc-col p-4 bg-[var(--wash)] border border-[var(--hairline-soft)] rounded-xl hidden lg:block">
+      <a href="{{ docs_base }}/docs" class="block text-xs text-[var(--faint)] hover:text-[var(--accent)] mb-4">← {{ t('docs_center', '文档中心') }}</a>
+      <h4 class="text-[11px] uppercase tracking-widest text-[var(--faint)] font-bold mb-3">{{ t('docs_series', '主题开发') }}</h4>
+      {% for d in docs_items %}
+      <a href="{{ docs_base }}/docs/{{ d.slug }}" class="flex items-baseline py-1.5 text-[13px] rounded-md px-2 -mx-2 transition-colors {% if d.slug == doc.slug %}text-[var(--accent)] font-bold bg-[var(--accent-soft)]{% else %}text-[var(--ink-2)] hover:text-[var(--accent)]{% endif %}">
+        <span class="text-[var(--faint)] font-mono text-[11px] mr-2">{{ d.num }}</span>
+        <span class="flex-1">{{ d.title }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="min-w-0">
+    <span class="eyebrow block mb-4">PART {{ doc.num }}</span>
+    <h1 class="ff-serif text-3xl md:text-4xl font-black text-[var(--ink)] mb-3">{{ doc.title }}</h1>
+    {% if doc.desc %}<p class="text-[var(--muted)] mb-10">{{ doc.desc }}</p>{% endif %}
+    <div class="doc-content">{{ doc_html|safe }}</div>
+    <div class="flex items-center justify-between mt-12 pt-8 border-t border-[var(--hairline)]">
+      {% if prev_doc %}
+      <a href="{{ docs_base }}/docs/{{ prev_doc.slug }}" class="px-5 py-2 rounded-full text-sm border border-[var(--hairline)] text-[var(--ink)] hover:border-[var(--accent)] hover:text-[var(--accent)]">← {{ prev_doc.title }}</a>
+      {% else %}<span></span>{% endif %}
+      {% if next_doc %}
+      <a href="{{ docs_base }}/docs/{{ next_doc.slug }}" class="px-5 py-2 rounded-full text-sm border border-[var(--hairline)] text-[var(--ink)] hover:border-[var(--accent)] hover:text-[var(--accent)]">{{ next_doc.title }} →</a>
+      {% else %}<span></span>{% endif %}
+    </div>
+  </div>
+
+  <div>
+    <div class="doc-col p-4 bg-[var(--wash)] border border-[var(--hairline-soft)] rounded-xl hidden xl:block">
+      <h4 class="text-[11px] uppercase tracking-widest text-[var(--faint)] font-bold mb-3">{{ t('toc_title', '本页目录') }}</h4>
+      {% if toc %}
+        {% for tg in toc %}
+        <a href="#{{ tg.anchor }}" data-anchor="{{ tg.anchor }}" class="{{ 'toc-link toc-h2' if tg.level == '2' else 'toc-link toc-h3' }}">{{ tg.text }}</a>
+        {% endfor %}
+      {% else %}
+        <p class="text-[var(--ghost)] text-sm">{{ t('no_toc', '暂无目录') }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}{% if doc_js %}<script>{{ doc_js|safe }}</script>{% endif %}{% endblock %}

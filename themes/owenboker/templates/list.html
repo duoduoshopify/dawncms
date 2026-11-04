@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+{% if empty %}
+<div class="max-w-2xl mx-auto px-6 py-28 text-center">
+  <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--ink)] mb-8">{{ empty_msg }}</h1>
+  <a href="{{ home_url or '/' }}" class="btn-primary">{{ t('back_all', '返回全部文章') }}</a>
+</div>
+{% elif is_home and page == 1 %}
+{% set home_layout = theme_settings.home_layout or 'Docs' %}
+{% if home_layout == 'Magazine' %}
+{# ===== 杂志居中首页：无侧栏，区块铺满 ===== #}
+<div class="max-w-[1200px] w-full mx-auto px-5 xl:px-10 py-14 lg:py-16">
+  {% for sec in home_sections %}
+  {% if sec.enabled %}{% include "sections/" + sec.type + ".html" %}{% endif %}
+  {% endfor %}
+</div>
+{% else %}
+{# ===== 文档知识库首页：左侧目录侧栏 + 右侧内容 ===== #}
+<div class="max-w-[1366px] w-full mx-auto px-5 xl:px-10">
+  <div class="group flex relative">
+    {# 大屏侧栏底色延伸到屏幕左缘 #}
+    <div class="hidden lg:block absolute top-0 left-0 h-full w-screen -translate-x-full">
+      <div class="dc-sidebar-bg sticky top-20 w-full h-[calc(100vh-5rem)] bg-[var(--wash)]"></div>
+    </div>
+
+    {# 文档目录侧栏（移动端为抽屉） #}
+    <div data-docs-menu class="group fixed -left-full invisible lg:visible lg:h-[calc(100vh-5rem)] lg:sticky lg:left-0 lg:top-20 flex-none overflow-hidden [&.open]:max-lg:visible [&.open]:max-lg:z-50 [&.open]:max-lg:inset-0">
+      <div data-docs-menu-close class="hidden group-[.open]:max-lg:block fixed -z-10 inset-0 bg-black/20 backdrop-blur-sm"></div>
+      <div class="h-full w-full max-w-xs lg:w-72 px-8 lg:pl-0 lg:pr-6 py-10 lg:py-14 dc-sidebar relative z-10 overflow-x-hidden overflow-y-auto max-lg:-translate-x-full group-[.open]:max-lg:translate-x-0 group-[.open]:max-lg:shadow-lg group-[.open]:max-lg:transition group-[.open]:max-lg:ease-out">
+        <div class="sticky top-0 h-0 w-full z-10">
+          <button type="button" data-docs-menu-close aria-label="{{ t('close', '关闭') }}" class="-translate-y-6 translate-x-full hidden group-[.open]:max-lg:flex items-center justify-center p-2 ml-auto rounded-md text-[var(--muted)] hover:text-[var(--ink)] bg-[var(--wash)]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+        {% include "partials/docs_sidebar.html" %}
+      </div>
+    </div>
+
+    {# 主内容区（内边距只补左侧，右侧与导航右缘对齐） #}
+    <div class="relative flex flex-col flex-auto min-w-0 py-14 lg:py-16">
+      <div class="flex-auto min-w-0 px-0 lg:pl-10 xl:pl-16">
+        <div class="lg:hidden mb-8">
+          <button type="button" data-docs-menu-toggle class="inline-flex items-center h-9 px-3.5 rounded-md ring-1 ring-[var(--hairline-strong)] ring-inset text-sm font-medium text-[var(--ink-2)]">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16"/></svg>
+            {{ t('docs_menu', '文档目录') }}
+          </button>
+        </div>
+
+        {% include "partials/about_card.html" %}
+        {% for sec in home_sections %}
+        {% if sec.enabled and sec.type not in ('search', 'newsletter') %}{% include "sections/" + sec.type + ".html" %}{% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% else %}
+<section class="max-w-[1200px] mx-auto px-5 xl:px-10 py-16 sm:py-20 md:py-28 text-center">
+  <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--ink)] mb-5">{{ heading }}</h1>
+  <p class="max-w-3xl mx-auto text-[1.375rem] leading-8 text-[var(--muted)] mb-10">{{ sub_line }}</p>
+  {% if search_action|default('/search') %}
+  <form method="get" action="{{ search_action|default('/search') }}" class="flex justify-center">
+    <div class="relative w-full max-w-md">
+      <input type="search" name="q" value="{{ q or '' }}" placeholder="{{ t('search_ph', '搜索文章…') }}" class="w-full h-11 px-4 rounded-md ring-1 ring-[var(--hairline-strong)] ring-inset bg-[var(--paper)] text-[var(--ink-soft)] text-sm focus:outline-none focus:ring-[var(--accent)]">
+      <button type="submit" class="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 h-8 rounded-md bg-[var(--accent)] text-white text-xs font-semibold hover:bg-[var(--accent-deep)]">{{ t('search_btn', '搜索') }}</button>
+    </div>
+  </form>
+  {% endif %}
+</section>
+
+<div class="max-w-[1200px] mx-auto px-5 xl:px-10 pb-6 hairline-b">
+  <div class="flex flex-wrap gap-x-7 gap-y-3 justify-center">
+    <a href="{{ home_url or '/' }}" class="cat-tab {% if not current_cat %}active{% endif %}">{{ t('tab_all', '全部') }}</a>
+    {% for c in cats %}
+    <a href="{{ c.url }}" class="cat-tab {% if current_cat == c.slug %}active{% endif %}">{{ c.name }} · {{ c.count }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+{% if notice %}<div class="max-w-[1200px] mx-auto px-5 xl:px-10 pt-6 text-center text-sm text-[var(--accent)]">{{ notice }}</div>{% endif %}
+
+{% if featured and not series_mode %}
+<section class="max-w-[1200px] mx-auto px-5 xl:px-10 py-16 sm:py-20">
+  <p class="text-sm text-[var(--muted)] mb-6">{{ t('featured_label', '精选') }}</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    {% set p = featured %}{% include "partials/post_card.html" %}
+    {% for p in recent[:5] %}{% include "partials/post_card.html" %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="max-w-[1200px] mx-auto px-5 xl:px-10 py-16 sm:py-20 {% if featured and not series_mode %}pt-0 sm:pt-0{% endif %}">
+  {% if series_mode %}
+  <p class="text-sm text-[var(--muted)] mb-6">{{ t('series_label', '连载章节') }}</p>
+  <ol class="border-t border-[var(--hairline)]">
+    {% for p in posts %}
+    <li>
+      <a href="{{ p.url }}" class="group flex items-baseline gap-4 py-4 border-b border-[var(--hairline)] px-2 -mx-2 rounded-md hover:bg-[var(--wash)]">
+        <span class="text-[var(--accent)] text-sm font-bold w-8 flex-none">{{ "%02d" % ((page - 1) * per_page + loop.index) }}</span>
+        <div class="min-w-0 flex-1">
+          <span class="font-semibold text-[var(--ink)] group-hover:opacity-80">{{ p.title }}</span>
+          {% if p.member %}<span class="inline-block px-2 py-0.5 badge-accent text-[11px] font-semibold rounded-full ml-2">{{ t('member_badge', '会员') }}</span>{% endif %}
+          <p class="text-[var(--muted)] text-xs mt-1 line-clamp-1">{{ p.desc }}</p>
+        </div>
+        <span class="text-[var(--faint)] text-xs flex-none">{{ p.date }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  {% set card_style = theme_settings.blog_card_style or 'Grid' %}
+  {% if card_style == 'Minimal' %}
+  <div class="max-w-3xl mx-auto py-4">
+    <p class="text-sm text-[var(--muted)] mb-6">{{ t('latest_label', '最新') }}<span class="text-xs text-[var(--faint)] ml-4">{{ t('total_fmt', '共 {n} 篇').replace('{n}', total|string) }}</span></p>
+    {% for p in posts %}
+    <div class="flex flex-wrap py-8 border-t border-[var(--hairline)] first:border-t-0">
+      <div class="w-full sm:w-1/2 flex-none pr-4 mb-3 sm:mb-0 text-sm text-[var(--muted)]">{{ p.date }}</div>
+      <div class="w-full sm:w-1/2 flex-none ml-auto">
+        <a href="{{ p.url }}" class="group block">
+          <h3 class="font-semibold text-[var(--ink)] group-hover:opacity-80">{{ p.title }}{% if p.member %}<span class="inline-block px-2 py-0.5 badge-accent text-[11px] font-semibold rounded-full ml-2">{{ t('member_badge', '会员') }}</span>{% endif %}</h3>
+          {% if p.desc %}<p class="mt-1.5 text-sm text-[var(--muted)] line-clamp-2">{{ p.desc }}</p>{% endif %}
+          <span class="inline-block mt-2 text-sm font-semibold text-[var(--accent)]">{{ t('read_more', '阅读更多 →') }}</span>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% elif card_style == 'Directory' %}
+  {% for g in cat_groups %}
+  <div class="max-w-[1200px] mx-auto py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <div class="flex items-center md:col-span-2 lg:col-span-3">
+      <h2 class="font-semibold text-lg text-[var(--ink)]">{{ g.name }}</h2>
+      <a href="{{ g.url }}" class="flex-none ml-auto inline-flex items-center text-sm text-[var(--muted)] hover:opacity-80">{{ t('view_all', '查看全部 →') }}</a>
+    </div>
+    {% for p in g.posts %}
+    <a href="{{ p.url }}" class="block group">
+      <h3 class="font-semibold text-[var(--ink)] group-hover:opacity-80">{{ p.title }}</h3>
+    </a>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="flex items-baseline mb-6">
+    <p class="text-sm text-[var(--muted)]">{{ t('latest_label', '最新') }}</p>
+    <span class="text-xs text-[var(--faint)] ml-4">{{ t('total_fmt', '共 {n} 篇').replace('{n}', total|string) }} · {{ t('page_fmt', '第 {p}/{n} 页').replace('{p}', page|string).replace('{n}', pages|string) }}</span>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    {% for p in posts %}{% include "partials/post_card.html" %}{% endfor %}
+  </div>
+  {% endif %}
+  {% endif %}
+</section>
+
+<nav class="max-w-[1200px] mx-auto px-5 xl:px-10 pb-16 flex items-center justify-center gap-6">
+  {% if page > 1 %}
+  <a href="{{ base_url }}{{ page - 1 }}" rel="prev" class="btn-secondary">{{ t('prev_page', '← 上一页') }}</a>
+  {% else %}
+  <span class="btn-secondary opacity-40 cursor-default">{{ t('prev_page', '← 上一页') }}</span>
+  {% endif %}
+  <span class="text-[var(--muted)] text-sm">{{ page }} / {{ pages }}</span>
+  {% if page < pages %}
+  <a href="{{ base_url }}{{ page + 1 }}" rel="next" class="btn-secondary">{{ t('next_page', '下一页 →') }}</a>
+  {% else %}
+  <span class="btn-secondary opacity-40 cursor-default">{{ t('next_page', '下一页 →') }}</span>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

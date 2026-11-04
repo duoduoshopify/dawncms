@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="{{ html_lang or 'zh-CN' }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ page_title }}{% endblock %}</title>
+<meta name="description" content="{{ page_desc or site_tagline }}">
+{% if canonical %}<link rel="canonical" href="{{ canonical }}">{% endif %}
+<link rel="alternate" type="application/rss+xml" title="{{ site_name }} RSS" href="/feed.xml">
+<link rel="icon" type="image/svg+xml" href="{{ logo_url }}">
+<link rel="apple-touch-icon" href="{{ logo_url }}">
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_desc or site_tagline }}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="{{ og_locale or 'zh-CN' }}">
+{% for ol in og_locale_alternates or [] %}<meta property="og:locale:alternate" content="{{ ol }}">{% endfor %}
+{% if canonical %}<meta property="og:url" content="{{ canonical }}">{% endif %}
+<meta property="og:image" content="{{ og_image or (site_base_url + '/static/logo.svg') }}">
+<meta name="twitter:card" content="summary">
+{% if robots_meta %}<meta name="robots" content="{{ robots_meta }}">{% endif %}
+{% if extra_head %}{{ extra_head|safe }}{% endif %}
+{% if site_schema %}{{ site_schema|safe }}{% endif %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+<style>{{ theme_css }}</style>
+<style>{{ base_css }}</style>
+<style>{{ doc_css }}</style>
+{% if layout_css %}<style>{{ layout_css }}</style>{% endif %}
+{% block head %}{% endblock %}
+</head>
+<body class="min-h-screen layout-{{ layout_mode }} pw-{{ 'full' if page_width == 'Full width' else 'page' }}">
+{% include "partials/nav.html" %}
+{% block content %}{% endblock %}
+{% include "partials/footer.html" %}
+{% if global_js %}{{ global_js|safe }}{% endif %}
+{% if theme_js %}<script>{{ theme_js|safe }}</script>{% endif %}
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,95 @@
+/* OwenBoker 基线样式（rounded-md / ring 细边 / Inter / 亮暗双模式），全部变量驱动 */
+body { background: var(--paper); color: var(--ink-soft); font-family: var(--doc-font); transition: background .3s ease, color .3s ease; }
+::selection { background: rgba(var(--accent-rgb),.18); }
+.ff-serif { font-family: var(--serif); }
+
+/* 暗色模式：html.dark 下重定义 token（vars.json 为亮色基准）
+   注意：accent 不在此覆盖——由主题设置系统统一派生（dawn_theme_settings_css），否则 accent_color 设置在暗色下失效 */
+html.dark body { background: #0f172a; color: #94a3b8; }
+html.dark { color-scheme: dark; }
+html.dark body {
+  --paper: #0f172a; --card: #1e293b; --wash: #1e293b;
+  --ink: #f1f5f9; --ink-soft: #e2e8f0; --ink-2: #cbd5e1;
+  --muted: #94a3b8; --faint: #64748b; --dim2: #475569;
+  --hairline: #1e293b; --hairline_soft: #16203a; --hairline_strong: #334155;
+  --ink_rgb: 241,245,249; --muted_rgb: 148,163,184;
+  --code_bg: #1e293b; --code_text: #a5b4fc;
+  --tag_bg: #1e293b; --tag_text: #94a3b8;
+}
+
+/* 按钮：rounded-md + ring 细边，不用胶囊 */
+.btn-primary { display:inline-block; padding:.65rem 1.5rem; border-radius:.5rem; background:var(--accent); color:#fff; font-weight:600; font-size:.875rem; letter-spacing:.02em; transition:all .2s ease; }
+.btn-primary:hover { background:var(--accent-deep); }
+.btn-secondary { display:inline-block; padding:.65rem 1.5rem; border-radius:.5rem; box-shadow:inset 0 0 0 1px var(--hairline-strong); color:var(--ink); font-weight:600; font-size:.875rem; letter-spacing:.02em; transition:all .2s ease; }
+.btn-secondary:hover { box-shadow:inset 0 0 0 1px var(--accent); color:var(--accent); }
+
+.line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.line-clamp-3 { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+
+/* 卡片：无边框信息流，仅封面 rounded-md + 内嵌 ring */
+.paper-card { background:transparent; border:none; transition:all .3s ease; }
+.paper-card:hover { transform:none; box-shadow:none; }
+.dc-cover { position:relative; border-radius:.5rem; overflow:hidden; background:var(--wash); }
+.dc-cover::after { content:""; position:absolute; inset:0; box-shadow:inset 0 0 0 1px rgba(var(--ink-rgb),.06); border-radius:.5rem; pointer-events:none; }
+.dc-cover img { transition:transform .4s ease; }
+a:hover .dc-cover img { transform:scale(1.05); }
+
+.eyebrow { color:var(--accent); font-size:.8125rem; font-weight:600; letter-spacing:.012em; }
+.hairline-b { border-bottom:1px solid var(--hairline); }
+a { transition:color .2s ease; }
+
+/* 顶栏毛玻璃：顶部时透明，滚动后（.stuck）才铺底色 */
+.dc-header { transition:background .3s ease, border-color .3s ease; }
+.dc-header.stuck { background: color-mix(in srgb, var(--paper) 90%, transparent); }
+html.dark .dc-header.stuck { background: color-mix(in srgb, var(--paper) 70%, transparent); }
+
+/* 顶部右上角渐变光斑 */
+.dc-blob { position:absolute; right:0; top:0; z-index:-1; overflow:hidden; pointer-events:none; }
+.dc-blob > div { position:relative; width:600px; height:600px; transform:translate(66%,-66%); background:linear-gradient(to bottom left, var(--accent), transparent); border-radius:9999px; filter:blur(100px); opacity:.35; }
+@media (min-width:1024px) { .dc-blob > div { transform:translate(50%,-50%); } }
+html.dark .dc-blob > div { opacity:.18; }
+
+/* 分类 tab：朴素文字链接 */
+.cat-tab { color:var(--muted); font-size:.875rem; font-weight:500; padding:.25rem 0; border-bottom:2px solid transparent; }
+.cat-tab:hover { color:var(--ink); }
+.cat-tab.active { color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
+
+/* 文档侧栏三种风格（docs_sidebar_style：Neutral / Transparent / Dark） */
+.dc-sidebar { background: var(--wash); }
+.has-sidebar-transparent .dc-sidebar { background: transparent; border-right: 1px solid var(--hairline); }
+.has-sidebar-transparent .dc-sidebar-bg { display: none; }
+.has-sidebar-dark .dc-sidebar { background: #111827; }
+html.dark .has-sidebar-dark .dc-sidebar { background: #030712; }
+.has-sidebar-dark .dc-sidebar-bg > div { background: #111827; }
+html.dark .has-sidebar-dark .dc-sidebar-bg > div { background: #030712; }
+.has-sidebar-dark .dc-sidebar h3 { color: #f1f5f9; }
+.has-sidebar-dark .dc-sidebar a span.leading-5 { color: #9ca3af; }
+.has-sidebar-dark .dc-sidebar a:hover span.leading-5 { color: #e5e7eb; }
+.has-sidebar-dark .dc-sidebar a span.leading-5.font-semibold { color: var(--accent); }
+.has-sidebar-dark .dc-sidebar ul { border-color: rgba(255,255,255,.1); }
+.has-sidebar-dark .dc-sidebar .h-0\.5 { background: rgba(255,255,255,.15); }
+
+/* 侧栏分节折叠 */
+[data-docs-section] > ul { display: block; }
+[data-docs-section]:not(.open) > ul { display: none; }
+[data-docs-section-toggle] svg { transition: transform .2s ease; }
+[data-docs-section].open [data-docs-section-toggle] svg { transform: rotate(90deg); }
+
+/* var() 颜色无法使用 Tailwind 的 /40、/95 透明度修饰符（v3 CDN 不编译），用这些工具类替代 */
+.badge-accent { box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb),.4); color: var(--accent); }
+.card-hoverable { box-shadow: inset 0 0 0 1px var(--hairline); transition: box-shadow .2s ease; }
+.card-hoverable:hover { box-shadow: inset 0 0 0 2px rgba(var(--accent-rgb),.5); }
+.nav-search { background: color-mix(in srgb, var(--paper) 95%, transparent); }
+.nav-search:hover { background: var(--wash); }
+
+/* 灯箱包裹的图片链接：块级 + 无下划线 + 放大镜手势 */
+.doc-content a:has(> img) { display: block; text-decoration: none; font-weight: inherit; color: inherit; }
+.doc-content a:has(> img) img { cursor: zoom-in; }
+
+/* 页面宽度：Full width（主题设置 page_width）——放开页头/内容/页脚的宽度上限，保留两侧内边距。
+   body.pw-full 前缀提升优先级，不依赖 !important */
+body.pw-full .max-w-\[1200px\],
+body.pw-full .max-w-\[1366px\] { max-width: none; }
+
+/* Full width 模式下文章正文列随布局铺开（仅 article，不影响 hero/简介等排版性文本） */
+body.pw-full article.max-w-3xl { max-width: none; }

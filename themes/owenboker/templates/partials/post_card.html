@@ -1,0 +1,15 @@
+<a href="{{ p.url }}" class="block group h-full">
+  {% if p.cover %}
+  <div class="dc-cover list-cover w-full mb-3">
+    <img src="{{ p.cover }}" alt="{{ p.title }}" loading="lazy" class="w-full h-full object-cover cover-img">
+  </div>
+  {% endif %}
+  <div class="flex items-center mb-1">
+    {% if p.member %}<span class="inline-block px-2 py-0.5 badge-accent text-[11px] font-semibold rounded-full">{{ t('member_badge', '会员') }}</span>{% endif %}
+  </div>
+  <h3 class="card-title font-semibold text-[var(--ink)] leading-snug line-clamp-2">{{ p.title }}</h3>
+  <div class="mt-1 text-sm text-[var(--muted)]">
+    <span>{{ p.date }}</span>
+    {% if p.category %}<span class="opacity-50 mx-1">—</span><span>{{ p.category }}</span>{% endif %}
+  </div>
+</a>

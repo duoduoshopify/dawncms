@@ -1,0 +1,22 @@
+<footer class="mt-16">
+  <div class="max-w-[1200px] mx-auto px-6 pb-10">
+    <div class="hairline-b">
+      <div class="py-10 text-center">
+        <span class="inline-block w-9 h-9 rounded-full border border-[var(--hairline)] text-[var(--accent)] text-sm leading-9 text-center mb-3">✉</span>
+        <p class="ff-serif text-[var(--ink)] font-bold text-lg mb-1">{{ theme_settings.email_signup_title or t('subscribe_title', '订阅 ' ~ site_name) }}</p>
+        <p class="text-[var(--muted)] text-xs mb-4">{{ theme_settings.email_signup_description or t('subscribe_sub', '新文章发布时，第一时间寄到你的邮箱') }}</p>
+        <form method="post" action="/subscribe" class="flex items-center max-w-sm mx-auto">
+          <input type="email" name="email" required placeholder="you@example.com" class="flex-1 min-w-0 px-4 py-2.5 rounded-full bg-white border border-[var(--hairline)] text-[var(--ink-soft)] text-sm focus:outline-none focus:border-[var(--accent)]">
+          <button type="submit" class="ml-2 px-5 py-2.5 rounded-full bg-[var(--ink)] text-[var(--paper)] text-sm font-semibold hover:bg-[var(--accent)] shrink-0">{{ t('subscribe_btn', '订阅') }}</button>
+        </form>
+      </div>
+    </div>
+    {% if footer_nav %}
+    <div class="flex items-center justify-center gap-6 mt-8 mb-4">
+      {% for n in footer_nav %}<a href="{{ n.url }}" class="text-[var(--muted)] hover:text-[var(--accent)] text-xs">{{ n.label }}</a>{% endfor %}
+    </div>
+    {% endif %}
+    <p class="text-[var(--faint)] text-xs text-center">© {{ year }} {{ site_name }} · {{ t('tagline', site_tagline) }} <span class="mx-1 opacity-60">·</span> <span class="opacity-70">Powered by <strong class="font-bold">DawnCMS</strong></span></p>
+    <p class="ff-serif text-[var(--faint)] text-xs text-center mt-2 tracking-widest">🖋️ {{ t('brand_note', site_tagline) }}</p>
+  </div>
+</footer>

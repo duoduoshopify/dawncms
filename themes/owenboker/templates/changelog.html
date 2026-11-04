@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="max-w-[1200px] mx-auto px-5 xl:px-10 py-16 sm:py-20 md:py-28 text-center">
+  <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-[var(--ink)] mb-5">{{ page_title }}</h1>
+  <p class="max-w-3xl mx-auto text-[1.375rem] leading-8 text-[var(--muted)]">{{ page_desc }}</p>
+</section>
+
+<div class="max-w-5xl mx-auto px-5 lg:px-3 py-16 sm:py-20">
+  <div class="lg:border-l-2 border-[var(--hairline)]">
+    {% for p in posts %}
+    <div class="flex flex-col lg:flex-row lg:ml-7 py-16 first:pt-0 last:pb-0 border-b last:border-none border-[var(--hairline)]">
+      <div class="lg:w-1/3 lg:pr-6 max-lg:pb-6">
+        <div class="flex sticky top-32">
+          <span class="absolute top-0 left-0 -translate-x-6 lg:-translate-x-8 h-5 flex-none -ml-0 mr-2 flex items-center">
+            <span class="flex-none h-0.5 w-2 bg-[var(--hairline-strong)]"></span>
+            <span class="flex relative flex-none items-center justify-center w-3 h-3 rounded-full"><span class="absolute inset-0 rounded-full bg-[var(--accent)] opacity-20"></span><span class="block bg-[var(--accent)] w-1.5 h-1.5 rounded-full"></span></span>
+          </span>
+          <time class="text-sm font-semibold text-[var(--ink)]">{{ p.date }}</time>
+        </div>
+      </div>
+      <div class="lg:w-2/3 min-w-0">
+        <a href="{{ p.url }}" class="block group">
+          <h2 class="text-xl font-bold tracking-tight text-[var(--ink)] group-hover:opacity-80">{{ p.title }}</h2>
+          {% if p.desc %}<p class="mt-2 text-[var(--muted)] leading-relaxed">{{ p.desc }}</p>{% endif %}
+          {% if p.cover %}
+          <div class="dc-cover aspect-[16/9] mt-4">
+            <img src="{{ p.cover }}" alt="{{ p.title }}" loading="lazy" class="w-full h-full object-cover cover-img">
+          </div>
+          {% endif %}
+          <span class="inline-block mt-3 text-sm font-semibold text-[var(--accent)]">{{ t('read_more', '阅读更多 →') }}</span>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+    {% if not posts %}
+    <p class="lg:ml-7 text-[var(--muted)] py-8">{{ t('changelog_empty', '暂无更新记录。给文章打上 hash-changelog 标签即可出现在这里。') }}</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

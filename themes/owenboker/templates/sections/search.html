@@ -1,0 +1,6 @@
+<form method="get" action="{{ search_action|default('/search') }}" class="max-w-3xl mt-8">
+  <div class="relative w-full max-w-md">
+    <input type="search" name="q" value="{{ q or '' }}" placeholder="{{ t('search_ph', '搜索文章…') }}" class="w-full h-11 px-4 rounded-md ring-1 ring-[var(--hairline-strong)] ring-inset bg-[var(--paper)] text-[var(--ink-soft)] text-sm focus:outline-none focus:ring-[var(--accent)]">
+    <button type="submit" class="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 h-8 rounded-md bg-[var(--accent)] text-white text-xs font-semibold hover:bg-[var(--accent-deep)]">{{ t('search_btn', '搜索') }}</button>
+  </div>
+</form>

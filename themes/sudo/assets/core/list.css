@@ -1,0 +1,13 @@
+/* 列表页样式（原 ui.blog_pages.LIST_CSS） */
+.masthead { background: radial-gradient(circle at 50% 0%, rgba(var(--accent-rgb),.05) 0%, transparent 60%); }
+    .cat-tab { position:relative; padding:.4rem .2rem; color:var(--ink-2); font-size:.92rem; }
+    .cat-tab:hover { color:var(--ink); }
+    .cat-tab.active { color:var(--accent); font-weight:700; }
+    .cat-tab.active::after { content:''; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:var(--accent); border-radius:2px; }
+    .card-title { transition: color .25s ease; }
+    .group:hover .card-title { color:var(--accent); }
+    .feature-grid { align-items: stretch; }
+    .feature-cover { aspect-ratio: 16/10; border-bottom:1px solid var(--hairline-soft); }
+    .list-cover { aspect-ratio: 16/9; border-bottom:1px solid var(--hairline-soft); }
+    .cover-img { transition: transform .5s ease; }
+    .group:hover .cover-img { transform: scale(1.03); }

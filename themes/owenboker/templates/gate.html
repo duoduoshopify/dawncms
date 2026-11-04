@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-5 py-24 text-center">
+  <span class="inline-flex items-center px-2.5 py-1 rounded-full badge-accent text-xs font-semibold mb-6">{{ t('gate_badge', '会员专享') }}</span>
+  <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-[var(--ink)] mb-5 leading-snug">{{ a.title }}</h1>
+  <div class="mb-6 text-sm">
+    <span class="text-[var(--accent)] font-semibold mr-3">{{ a.category }}</span>
+    <span class="text-[var(--faint)]">{{ a.date }}</span>
+  </div>
+  {% if a.desc %}<p class="text-[var(--muted)] text-[1.125rem] leading-relaxed mb-10">{{ a.desc }}</p>{% endif %}
+  <div class="p-8 rounded-md ring-1 ring-[var(--hairline-strong)] ring-inset bg-[var(--card)] text-left">
+    <p class="text-[var(--ink)] font-semibold mb-5">{{ t('gate_text', '本文为会员专享内容，登录后可阅读全文。') }}</p>
+    <a href="/login?next={{ current_path }}" class="btn-primary mr-3">{{ t('gate_login', '登录阅读') }}</a>
+    <a href="/register" class="btn-secondary">{{ t('gate_register', '免费注册') }}</a>
+  </div>
+</div>
+{% endblock %}

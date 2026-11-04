@@ -1,0 +1,10 @@
+{
+  "paper": "#ffffff", "card": "#ffffff", "wash": "#f1f5f9",
+  "ink": "#1f2937", "ink_soft": "#334155", "ink_2": "#475569",
+  "muted": "#94a3b8", "faint": "#b6c1cf", "ghost": "#d3dbe4",
+  "hairline": "#e2e8f0", "hairline_soft": "#eef2f7", "hairline_strong": "#cbd5e1",
+  "accent": "#2563eb", "accent_deep": "#1d4ed8", "accent_soft": "#eff6ff",
+  "accent_rgb": "37,99,235", "code_bg": "#f1f5f9", "code_text": "#1d4ed8",
+  "hl_yellow": "#fef3c7", "hl_green": "#dcfce7", "hl_red": "#fee2e2", "hl_purple": "#ede9fe",
+  "tag_bg": "#f1f5f9", "tag_text": "#64748b"
+}

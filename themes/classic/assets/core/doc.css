@@ -1,0 +1,45 @@
+/* 文章页样式（原 ui.blog_article.DOC_CSS） */
+.doc-shell{min-height:100vh}
+.doc-progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-deep));z-index:60;transition:width .12s linear}
+.doc-col{position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto}
+.doc-col::-webkit-scrollbar{width:4px}
+.doc-col::-webkit-scrollbar-thumb{background:rgba(var(--muted-rgb),.35);border-radius:999px}
+.doc-main{max-width:720px}
+.doc-content{font-family:var(--doc-font);font-size:1.06rem}
+.doc-content h2{font-size:1.55rem;font-weight:800;color:var(--ink);margin:2.6rem 0 1.1rem;padding-left:.9rem;border-left:4px solid var(--accent);line-height:1.4}
+.doc-content h3{font-size:1.22rem;font-weight:700;color:var(--ink);margin:1.9rem 0 .8rem}
+.doc-content h4{font-size:1.05rem;font-weight:600;color:var(--ink-soft);margin:1.3rem 0 .6rem}
+.doc-content p{color:var(--ink-soft);line-height:2;margin:1.1rem 0}
+.doc-content ul,.doc-content ol{color:var(--ink-soft);line-height:1.95;margin:1.1rem 0;padding-left:1.5rem}
+.doc-content li{margin:.35rem 0}
+.doc-content strong{color:var(--ink)}
+.doc-content code{font-family:ui-monospace,monospace;background:var(--code-bg);color:var(--code-text);padding:.18rem .45rem;border-radius:5px;font-size:.88em}
+.doc-content pre{background:var(--ink);border-radius:12px;padding:1.2rem;overflow:auto;margin:1.6rem 0}
+.doc-content pre code{background:none;padding:0;color:var(--hairline-soft)}
+.doc-content blockquote{border-left:3px solid var(--accent);background:var(--wash);padding:1rem 1.3rem;margin:1.6rem 0;color:var(--ink-2);border-radius:0 10px 10px 0}
+.doc-content table{width:100%;border-collapse:collapse;margin:1.6rem 0;font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:.92rem}
+.doc-content th{background:var(--wash);color:var(--ink);padding:.75rem;text-align:left;border:1px solid var(--hairline)}
+.doc-content td{padding:.75rem;border:1px solid var(--hairline-soft);color:var(--ink-soft)}
+.doc-content img{max-width:100%;border-radius:12px;margin:1.6rem 0;border:1px solid var(--hairline-soft)}
+.doc-content hr{border:0;border-top:1px solid var(--hairline);margin:2.4rem auto;width:40%}
+.doc-content .md-cta{margin:1.9rem 0;padding:1.5rem 1.6rem;border-radius:16px;border:1px solid rgba(var(--accent-rgb),.3);background:linear-gradient(135deg,rgba(var(--accent-rgb),.07),rgba(var(--accent-rgb),.02))}
+.doc-content .md-cta-title{font-size:1.05rem;font-weight:800;color:var(--ink)}
+.doc-content .md-cta-desc{font-size:.95rem;color:var(--ink-2);margin-top:.5rem}
+.doc-content .md-cta-btn{display:inline-block;margin-top:1rem;padding:.7rem 1.4rem;border-radius:999px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:600}
+.doc-content .md-cta-btn:hover{background:var(--accent)}
+.doc-content a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;text-decoration-color:rgba(var(--accent-rgb),.45);font-weight:600}
+.doc-content a:hover{color:var(--accent-deep);text-decoration-color:var(--accent-deep)}
+.doc-content code a,.doc-content pre a{color:inherit;text-decoration:none}
+.toc-link{display:block;font-size:.84rem;color:var(--muted);padding:.35rem .6rem;border-radius:6px;border-left:2px solid transparent}
+.toc-link:hover{color:var(--ink);background:rgba(var(--ink-rgb),.04)}
+.toc-link.active{color:var(--accent);border-left-color:var(--accent);background:rgba(var(--accent-rgb),.06)}
+.toc-h3{padding-left:1.5rem;font-size:.78rem}
+.doc-content h2[id],.doc-content h3[id]{scroll-margin-top:88px}
+html{scroll-behavior:smooth}
+.doc-shell{overflow:visible !important}
+.doc-main,.doc-content{min-width:0}
+.doc-content{overflow-wrap:anywhere;word-break:break-word}
+.doc-content table{display:block;max-width:100%;overflow-x:auto}
+.doc-content iframe,.doc-content video,.doc-content .md-embed,.doc-content .md-code-block,.doc-content pre{max-width:100%}
+.doc-content .md-embed iframe,.doc-content .md-embed video{display:block;width:100%;min-height:240px;border:0;background:var(--ink);border-radius:12px}
+@media (max-width:767px){.doc-shell{overflow-x:hidden !important}.doc-content{font-size:1rem}.doc-content .md-embed iframe,.doc-content .md-embed video{min-height:200px}}

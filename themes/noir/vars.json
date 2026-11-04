@@ -1,0 +1,10 @@
+{
+  "paper": "#1a1917", "card": "#232120", "wash": "#2b2926",
+  "ink": "#e8e4da", "ink_soft": "#d6d1c5", "ink_2": "#b5b0a4",
+  "muted": "#8a857a", "faint": "#6e6a60", "ghost": "#55524a",
+  "hairline": "#3a372f", "hairline_soft": "#32302a", "hairline_strong": "#4a463d",
+  "accent": "#d4534a", "accent_deep": "#e06a60", "accent_soft": "#33252a",
+  "accent_rgb": "212,83,74", "ink_rgb": "232,228,218",
+  "code_bg": "#2b2926", "code_text": "#e08a80",
+  "tag_bg": "#2b2926", "tag_text": "#b5b0a4"
+}

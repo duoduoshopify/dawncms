@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+{% if empty %}
+<div class="max-w-2xl mx-auto px-6 py-28 text-center">
+  <h1 class="ff-mono text-2xl font-bold text-[var(--ink)] mb-8"><span class="text-[var(--accent)]">$ </span>{{ empty_msg }}</h1>
+  <a href="{{ home_url or '/' }}" class="btn-term-ghost">{{ t('back_all', '返回全部文章') }}</a>
+</div>
+{% else %}
+
+{% if is_home %}
+<section class="hero-glow">
+  <div class="max-w-[1200px] mx-auto px-6 pt-14 pb-12">
+    <div class="term-window">
+      <div class="term-bar">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="term-bar-title">visitor@{{ site_name }}: ~</span>
+        <span class="ml-auto ff-mono text-[10px] text-[var(--faint)] flex items-center gap-1.5"><span class="status-dot"></span>{{ t('status_online', '在线') }}</span>
+      </div>
+      <div class="term-body">
+        <p class="ff-mono text-sm text-[var(--muted)]"><span class="text-[var(--accent)] font-bold">$</span> whoami</p>
+        <h1 class="ff-mono text-3xl md:text-[2.8rem] font-black text-[var(--ink)] tracking-tight mt-2 leading-tight">{{ site_name }}<span class="caret ml-1">▊</span></h1>
+        <p class="ff-mono text-sm text-[var(--muted)] mt-7"><span class="text-[var(--accent)] font-bold">$</span> cat mission.txt</p>
+        <p class="text-[var(--ink-2)] text-[15px] leading-relaxed mt-2 max-w-2xl">{{ t('tagline', site_tagline) }}</p>
+        <div class="flex flex-wrap gap-x-10 gap-y-4 mt-8">
+          <div class="stat-cell"><div class="stat-num">{{ total }}</div><div class="stat-label">{{ t('stat_posts', 'POSTS / 文章') }}</div></div>
+          <div class="stat-cell"><div class="stat-num">{{ cats|length }}</div><div class="stat-label">{{ t('stat_cats', 'SECTIONS / 专栏') }}</div></div>
+          {% if series_groups %}<div class="stat-cell"><div class="stat-num">{{ series_groups|length }}</div><div class="stat-label">{{ t('stat_series', 'SERIES / 连载') }}</div></div>{% endif %}
+          <div class="stat-cell"><div class="stat-num flex items-center gap-2"><span class="status-dot"></span>UP</div><div class="stat-label">{{ t('stat_status', 'STATUS / 状态') }}</div></div>
+        </div>
+        <div class="flex flex-wrap gap-3 mt-9">
+          <a href="#latest" class="btn-term">{{ t('hero_cta_read', '开始阅读') }} <span>↓</span></a>
+          <a href="#subscribe" class="btn-term-ghost">$ {{ t('subscribe_btn', '订阅') }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<div class="max-w-[1200px] mx-auto px-6 py-8" id="latest">
+  <div class="grid gap-10 lg:grid-cols-[250px_minmax(0,1fr)]">
+
+    <aside class="hidden lg:block">
+      <div class="sticky top-20 space-y-7 pr-7 border-r border-[var(--hairline)]">
+        {% include "partials/about_card.html" %}
+        {% if search_action|default('/search') %}
+        <form method="get" action="{{ search_action|default('/search') }}" class="flex items-center">
+          <span class="ff-mono text-[var(--accent)] font-bold mr-2 flex-none">›</span>
+          <input type="search" name="q" value="{{ q or '' }}" placeholder="{{ t('search_ph', '快速搜索…') }}"
+                 class="flex-1 min-w-0 px-3 py-2 rounded-md border border-[var(--hairline)] text-sm focus:outline-none">
+        </form>
+        {% endif %}
+        <div>
+          <a href="{{ home_url or '/' }}" class="side-group {% if not current_cat %}side-active{% endif %}">
+            <span class="side-dot">▸</span>{{ t('all_posts', '全部文章') }}
+          </a>
+        </div>
+        {% if series_groups %}
+        <div class="pb-5 border-b border-[var(--hairline)]">
+          <div class="ff-mono text-[11px] tracking-widest text-[var(--faint)] font-bold mb-2">// {{ t('series_header', '连载系列') }}</div>
+          {% for g in series_groups %}
+          <div class="mb-4">
+            <a href="{{ g.url }}" class="side-group">
+              <span class="side-dot">▸</span>{{ g.name }}
+              <span class="ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[var(--accent)] text-[#0a0d0b] leading-none">{{ t('series_badge', '连载') }}</span>
+            </a>
+            <ul class="mt-1.5 space-y-1">
+              {% for sp in g.posts %}
+              <li><a href="{{ sp.url }}" class="side-link"><span class="ff-mono text-[10px] text-[var(--accent)] font-bold mr-1.5">{{ "%02d" % loop.index }}</span>{{ sp.title }}</a></li>
+              {% endfor %}
+            </ul>
+            <a href="{{ g.url }}" class="ff-mono block pl-5 mt-1.5 text-[11px] text-[var(--faint)] hover:text-[var(--accent)]">{{ t('view_all', '查看全部 →') }}</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% for g in cat_groups %}
+        <div>
+          <a href="{{ g.url }}" class="side-group {% if current_cat == g.slug %}side-active{% endif %}">
+            <span class="side-dot">▸</span>{{ g.name }}
+            {% if g.is_series %}<span class="ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[var(--accent)] text-[#0a0d0b] leading-none">{{ t('series_badge', '连载') }}</span>{% endif %}
+          </a>
+          <ul class="mt-1.5 space-y-1">
+            {% for sp in g.posts %}
+            <li><a href="{{ sp.url }}" class="side-link">{% if g.is_series %}<span class="ff-mono text-[10px] text-[var(--accent)] font-bold mr-1.5">{{ "%02d" % loop.index }}</span>{% endif %}{{ sp.title }}</a></li>
+            {% endfor %}
+          </ul>
+          <a href="{{ g.url }}" class="ff-mono block pl-5 mt-1.5 text-[11px] text-[var(--faint)] hover:text-[var(--accent)]">{{ t('view_all', '查看全部 →') }}</a>
+        </div>
+        {% endfor %}
+      </div>
+    </aside>
+
+    <main class="min-w-0">
+      <div class="mb-6 flex items-baseline justify-between flex-wrap gap-2">
+        <div>
+          <h1 class="sec-title"><span class="slashes">//</span>{{ heading }}</h1>
+          <p class="ff-mono text-[var(--muted)] text-xs mt-1.5"><span class="text-[var(--accent)]">$</span> {{ sub_line }}</p>
+        </div>
+        <span class="ff-mono text-[var(--faint)] text-xs">{{ t('total_fmt', '共 {n} 篇').replace('{n}', total|string) }}</span>
+      </div>
+
+      {% if notice %}<div class="ff-mono mb-5 text-sm text-[var(--accent)]">{{ notice }}</div>{% endif %}
+
+      {% if featured and page == 1 and not q and not series_mode %}
+      <a href="{{ featured.url }}" class="block group mb-8">
+        <div class="term-card overflow-hidden">
+          <div class="term-card-bar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="term-path">./featured/{{ featured.category or 'post' }}.md</span>
+            {% if featured.member %}<span class="ml-auto ff-mono text-[10px] text-[var(--accent)] border border-[var(--accent)]/40 rounded px-1.5 py-0.5 flex-none">{{ t('member_badge', '会员') }}</span>{% endif %}
+          </div>
+          <div class="md:grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+            <div class="overflow-hidden aspect-[16/9] md:aspect-auto md:min-h-[240px]">
+              <img src="{{ featured.cover }}" alt="{{ featured.title }}" class="w-full h-full object-cover cover-img">
+            </div>
+            <div class="p-6 md:p-8 flex flex-col justify-center">
+              <div class="ff-mono mb-2.5 text-[var(--accent)] text-[11px] font-bold tracking-widest uppercase"># {{ featured.category }}</div>
+              <h2 class="text-xl md:text-2xl font-extrabold text-[var(--ink)] leading-snug mb-3 group-hover:text-[var(--accent)]">{{ featured.title }}</h2>
+              <p class="text-[var(--muted)] text-sm leading-relaxed line-clamp-3">{{ featured.desc }}</p>
+              <div class="ff-mono flex items-center text-[var(--faint)] text-[11px] mt-5">
+                <span class="mr-4">{{ featured.date }}</span>
+                <span class="mr-4">{{ featured.read_time }}</span>
+                <span>{{ t('views_fmt', '{n} 阅读').replace('{n}', featured.views|string) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+      {% endif %}
+
+      {% if series_mode %}
+      <ol class="border-t border-[var(--hairline)]">
+        {% for p in posts %}
+        <li>
+          <a href="{{ p.url }}" class="group flex items-baseline gap-4 py-4 border-b border-[var(--hairline)] px-2 -mx-2 rounded-lg hover:bg-[var(--wash)]">
+            <span class="ff-mono text-sm text-[var(--accent)] font-bold w-8 flex-none">{{ "%02d" % ((page - 1) * per_page + loop.index) }}</span>
+            <div class="min-w-0 flex-1">
+              <span class="text-[15px] font-semibold text-[var(--ink)] group-hover:text-[var(--accent)]">{{ p.title }}</span>
+              {% if p.member %}<span class="inline-block px-2 py-0.5 border border-[var(--accent)]/40 text-[var(--accent)] text-[11px] font-semibold rounded-full ml-2">{{ t('member_badge', '会员') }}</span>{% endif %}
+              <p class="text-[var(--muted)] text-xs mt-1 line-clamp-1">{{ p.desc }}</p>
+            </div>
+            <span class="ff-mono text-[var(--faint)] text-[11px] flex-none">{{ p.date }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {% for p in posts %}
+        {% if not (loop.first and page == 1 and not q) %}
+        {% include "partials/post_card.html" %}
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if pages > 1 %}
+      <div class="mt-10 flex items-center justify-center gap-4">
+        {% if page > 1 %}
+        <a href="{{ base_url }}{{ page - 1 }}" class="page-btn">{{ t('prev_page', '← 上一页') }}</a>
+        {% endif %}
+        <span class="ff-mono text-[var(--faint)] text-xs">{{ page }} / {{ pages }}</span>
+        {% if page < pages %}
+        <a href="{{ base_url }}{{ page + 1 }}" class="page-btn">{{ t('next_page', '下一页 →') }}</a>
+        {% endif %}
+      </div>
+      {% endif %}
+    </main>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

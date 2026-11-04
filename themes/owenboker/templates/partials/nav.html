@@ -1,0 +1,133 @@
+<header data-header class="dc-header sticky z-50 top-0 min-h-20 flex flex-wrap items-center backdrop-blur border-b border-[var(--hairline)]">
+  <nav class="max-w-[1366px] w-full mx-auto px-5 xl:px-10 flex items-center py-4">
+    <a href="/" class="flex items-center flex-none mr-8" title="{{ site_name }}" aria-label="{{ site_name }}">
+      {% set dark_logo = theme_settings.dark_theme_logo %}
+      {% if dark_logo %}
+      <img src="{{ logo_url }}" alt="{{ site_name }} Logo" width="32" height="32" class="w-8 h-8 mr-2.5 rounded-md dark:hidden">
+      <img src="{{ dark_logo }}" alt="{{ site_name }} Logo" width="32" height="32" class="hidden dark:block w-8 h-8 mr-2.5 rounded-md">
+      {% else %}
+      <img src="{{ logo_url }}" alt="{{ site_name }} Logo" width="32" height="32" class="w-8 h-8 mr-2.5 rounded-md">
+      {% endif %}
+      <span class="font-bold text-lg text-[var(--ink)]">{{ site_name }}</span>
+    </a>
+
+    {% set maxn = (theme_settings.max_navigation_items or '5')|int %}
+    <div class="hidden lg:flex items-center">
+      {% for n in nav %}
+      {% if loop.index <= maxn %}
+      <a href="{{ n.url }}" class="px-3 py-1.5 mr-1 inline-flex items-center font-semibold text-sm leading-6 whitespace-nowrap rounded-lg text-[var(--ink-2)] hover:bg-[var(--wash)] hover:text-[var(--ink)]">{{ n.label }}</a>
+      {% endif %}
+      {% endfor %}
+      {% if nav|length > maxn %}
+      <div class="relative">
+        <button type="button" data-nav-dropdown-toggle aria-label="{{ t('toggle_menu', '菜单') }}" class="peer px-1.5 py-1.5 rounded-lg text-[var(--ink-2)] hover:bg-[var(--wash)]">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+        </button>
+        <div class="hidden peer-[.open]:block absolute top-12 right-0 w-64 max-h-[calc(100vh-6rem)] py-2 px-3 space-y-1 bg-[var(--card)] ring-1 ring-[var(--hairline)] shadow-lg rounded-md overflow-y-auto z-50">
+          {% for n in nav %}
+          {% if loop.index > maxn %}
+          <a href="{{ n.url }}" class="flex items-center px-3 py-1.5 font-semibold text-sm leading-6 rounded-lg text-[var(--ink-2)] hover:bg-[var(--wash)] hover:text-[var(--ink)]">{{ n.label }}</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="flex items-center ml-auto space-x-1">
+      {% if lang_switch %}
+      <div class="relative mr-2 group">
+        <button type="button" class="h-9 px-2 flex items-center gap-1 rounded-md text-[var(--muted)] hover:bg-[var(--wash)] hover:text-[var(--ink)] text-sm font-medium cursor-pointer">
+          🌐 {% for l in lang_switch %}{% if l.current %}{{ l.label }}{% endif %}{% endfor %}<span class="text-[10px] text-[var(--faint)]">▾</span>
+        </button>
+        <div class="hidden group-hover:block group-focus-within:block absolute right-0 top-full pt-1 z-50">
+          <div class="min-w-[8.5rem] py-1.5 rounded-md border border-[var(--hairline)] bg-[var(--card)] shadow-xl">
+            {% for l in lang_switch %}
+            <a href="{{ l.url }}" class="flex items-center px-4 py-2 text-sm whitespace-nowrap {% if l.current %}font-bold text-[var(--accent)]{% else %}text-[var(--ink-2)] hover:text-[var(--accent)] hover:bg-[var(--wash)]{% endif %}">{% if l.current %}<span class="mr-1.5">✓</span>{% endif %}{{ l.label }}{% if l.code %}<span class="ml-auto pl-3 text-[10px] text-[var(--faint)] self-center">{{ l.code }}</span>{% endif %}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <button type="button" data-theme-toggle class="h-9 w-9 flex items-center justify-center rounded-md text-[var(--muted)] hover:bg-[var(--wash)] hover:text-[var(--ink)]" title="{{ t('change_theme', '切换亮暗') }}" aria-label="{{ t('change_theme', '切换亮暗') }}">
+        <svg class="dark:hidden w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="hidden dark:inline w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+
+      <a href="/search" data-qs-open class="hidden xl:flex items-center h-9 w-56 min-w-0 px-4 overflow-hidden rounded-md ring-1 ring-[var(--hairline-strong)] ring-inset text-sm text-[var(--muted)] nav-search">
+        <svg class="flex-none w-4 h-4 text-[var(--faint)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m20 20-3.5-3.5"/></svg>
+        <span class="mx-2 truncate">{{ t('quick_search', '快速搜索…') }}</span>
+        <span class="ml-auto text-xs text-[var(--faint)]">⌘K</span>
+      </a>
+      <a href="/search" data-qs-open class="xl:hidden h-9 w-9 flex items-center justify-center rounded-md text-[var(--muted)] hover:bg-[var(--wash)] hover:text-[var(--ink)]" title="{{ t('quick_search', '快速搜索…') }}" aria-label="{{ t('quick_search', '快速搜索…') }}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m20 20-3.5-3.5"/></svg>
+      </a>
+
+      <div class="hidden lg:flex items-center pl-3 ml-2 border-l border-[var(--hairline)]">
+        {% if is_admin %}
+        <a href="/dadmin/logout" class="text-[var(--faint)] hover:text-[var(--ink-2)] text-sm">{{ t('logout', '退出') }}</a>
+        {% elif member_name %}
+        <span class="text-[var(--ink-2)] text-sm mr-4">👤 {{ member_name }}</span>
+        <a href="/logout" class="text-[var(--faint)] hover:text-[var(--ink-2)] text-sm">{{ t('logout', '退出') }}</a>
+        {% else %}
+        <a href="/login" class="text-[var(--ink-2)] hover:text-[var(--ink)] text-sm font-medium mr-4">{{ t('login', '登录') }}</a>
+        <a href="/register" class="px-4 py-2 rounded-md bg-[var(--accent)] text-white text-sm font-semibold hover:bg-[var(--accent-deep)]">{{ t('register', '注册') }}</a>
+        {% endif %}
+      </div>
+
+      <button type="button" data-mobile-menu-toggle class="lg:hidden h-9 w-9 flex items-center justify-center rounded-md text-[var(--muted)] hover:bg-[var(--wash)] hover:text-[var(--ink)]" title="{{ t('toggle_menu', '菜单') }}" aria-label="{{ t('toggle_menu', '菜单') }}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+</nav>
+
+
+</header>
+
+<nav data-mobile-menu class="group invisible flex lg:hidden fixed inset-0 -z-10 [&.open]:visible [&.open]:z-50">
+  <div data-mobile-menu-close class="fixed inset-0 bg-black/20 backdrop-blur-sm"></div>
+  <div class="fixed top-0 right-0 bottom-0 w-full max-w-xs bg-[var(--paper)] shadow-lg font-semibold text-[var(--ink)] transition ease-out translate-x-full group-[.open]:translate-x-0">
+    <div class="relative px-8 pb-6 pt-14 h-full overflow-y-auto">
+      <button type="button" data-mobile-menu-close aria-label="{{ t('close', '关闭') }}" class="absolute top-4 right-4 p-2 text-[var(--muted)] hover:text-[var(--ink)]">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="flex flex-col min-h-full">
+        {% for n in nav %}
+        <a href="{{ n.url }}" class="py-3 text-base border-b border-[var(--hairline)]">{{ n.label }}</a>
+        {% endfor %}
+        <div class="mt-6 pt-4 border-t border-[var(--hairline)]">
+          {% if is_admin %}
+          <a href="/dadmin/logout" class="block py-2 text-sm text-[var(--muted)]">{{ t('logout', '退出') }}</a>
+          {% elif member_name %}
+          <span class="block py-2 text-sm text-[var(--ink-2)]">👤 {{ member_name }}</span>
+          <a href="/logout" class="block py-2 text-sm text-[var(--muted)]">{{ t('logout', '退出') }}</a>
+          {% else %}
+          <a href="/login" class="block py-2 text-sm text-[var(--ink-2)]">{{ t('login', '登录') }}</a>
+          <a href="/register" class="inline-block mt-2 px-4 py-2 rounded-md bg-[var(--accent)] text-white text-sm font-semibold">{{ t('register', '注册') }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div data-qs-modal role="dialog" aria-modal="true" aria-label="{{ t('quick_search', '快速搜索…') }}"
+     data-qs-hint="{{ t('qs_hint', '输入关键词开始搜索') }}" data-qs-empty="{{ t('qs_empty', '没有找到相关内容') }}"
+     class="hidden fixed inset-0 z-[70] items-start justify-center px-4 pt-[14vh]">
+  <div data-qs-close class="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+  <div class="relative w-full max-w-xl rounded-xl bg-[var(--card)] ring-1 ring-[var(--hairline)] shadow-2xl overflow-hidden">
+    <div class="flex items-center px-4 border-b border-[var(--hairline)]">
+      <svg class="flex-none w-4 h-4 text-[var(--faint)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m20 20-3.5-3.5"/></svg>
+      <input data-qs-input type="text" autocomplete="off" spellcheck="false" placeholder="{{ t('quick_search', '快速搜索…') }}"
+             class="w-full h-12 px-3 bg-transparent outline-none text-sm text-[var(--ink)] placeholder:text-[var(--faint)]">
+      <button type="button" data-qs-close class="cursor-pointer flex-none text-[10px] text-[var(--faint)] border border-[var(--hairline)] rounded px-1.5 py-0.5 hover:text-[var(--ink)]">ESC</button>
+    </div>
+    <div data-qs-results class="max-h-[52vh] overflow-y-auto p-2"></div>
+    <div class="flex items-center gap-4 px-4 h-9 border-t border-[var(--hairline)] text-[10px] text-[var(--faint)]">
+      <span>↑↓ {{ t('qs_select', '选择') }}</span>
+      <span>↵ {{ t('qs_open', '打开') }}</span>
+      <span>ESC {{ t('close', '关闭') }}</span>
+    </div>
+  </div>
+</div>

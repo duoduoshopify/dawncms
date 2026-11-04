@@ -1,0 +1,31 @@
+/* OwenBoker Prism 主题（GitHub Dark 调色板），仅作用于带 language-* 的代码块 */
+.doc-content .md-code-block pre[class*="language-"],
+.doc-content code[class*="language-"] {
+  color: #c9d1d9; text-shadow: none; direction: ltr; text-align: left;
+  white-space: pre; word-spacing: normal; word-break: normal;
+  tab-size: 4; hyphens: none; font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.doc-content .md-code-block pre[class*="language-"]::selection,
+.doc-content code[class*="language-"]::selection { background: #234879; }
+
+/* md-code-block 外壳：语言标签 + 复制按钮条 */
+.doc-content .md-code-block { position: relative; border-radius: .5rem; overflow: hidden; margin: 1.6rem 0; background: #0d1117; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+.doc-content .md-code-block pre { background: transparent; border-radius: 0; margin: 0; padding: 1rem 1.25rem; overflow: auto; }
+.doc-content .md-code-block pre code { color: #c9d1d9; background: none; padding: 0; font-size: .85rem; line-height: 1.7; }
+.doc-content .md-code-lang { display: flex; align-items: center; padding: .4rem .85rem; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8b949e; background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.06); }
+.doc-content .md-code-copy { margin-left: auto; padding: .15rem .55rem; border-radius: .375rem; font-size: .7rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: #8b949e; background: rgba(255,255,255,.06); cursor: pointer; transition: all .2s ease; }
+.doc-content .md-code-copy:hover { color: #e6edf3; background: rgba(255,255,255,.12); }
+
+/* GitHub Dark token 配色 */
+.doc-content .token.comment, .doc-content .token.prolog, .doc-content .token.cdata { color: #8b949e; }
+.doc-content .token.doctype, .doc-content .token.punctuation { color: #c9d1d9; }
+.doc-content .token.property, .doc-content .token.tag, .doc-content .token.constant, .doc-content .token.symbol, .doc-content .token.deleted { color: #7ee787; }
+.doc-content .token.boolean, .doc-content .token.number { color: #79c0ff; }
+.doc-content .token.selector, .doc-content .token.attr-name, .doc-content .token.string, .doc-content .token.char, .doc-content .token.builtin, .doc-content .token.inserted { color: #a5d6ff; }
+.doc-content .token.operator, .doc-content .token.entity, .doc-content .token.url, .doc-content .token.variable { color: #ff7b72; background: none; }
+.doc-content .token.atrule, .doc-content .token.attr-value, .doc-content .token.class-name { color: #ffa657; }
+.doc-content .token.function { color: #d2a8ff; }
+.doc-content .token.keyword { color: #ff7b72; }
+.doc-content .token.regex, .doc-content .token.important { color: #a5d6ff; }
+.doc-content .token.important, .doc-content .token.bold { font-weight: bold; }
+.doc-content .token.italic { font-style: italic; }
