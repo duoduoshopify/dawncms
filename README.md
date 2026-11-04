@@ -2,6 +2,8 @@
 
 DawnCMS 独立博客系统（FastHTML + SQLite），可直接部署为任何网站的博客子站。
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 ## 功能
 
 - **前台**：文章列表（精选 + 分页）、分类页、文章详情（自动 TOC / 上一篇下一篇 / 相关文章推荐 / 外链新窗口 / 代码复制按钮）、站内搜索（owenboker 主题带 ⌘K 快速搜索弹窗，实时联想，多语言站搜对应译文）、`sitemap.xml`、`robots.txt`、JSON-LD（Article / BreadcrumbList / ItemList）
@@ -91,3 +93,7 @@ button_url: /contact
 - 生产环境用 uvicorn 反代（Nginx → 5010），并把 `static/` 交给 Nginx 直接服务
 - `database/blog.db` 与 `static/uploads/` 需要纳入备份
 - 完全独立的单体项目，无外部代码依赖
+
+## 许可证
+
+[MIT](LICENSE) © 2026 DawnCMS
