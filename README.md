@@ -1,6 +1,6 @@
 # Blog Standalone
 
-从 SEOSEM Tool 提取的独立博客系统（FastHTML + SQLite），可直接部署为任何网站的博客子站。
+DawnCMS 独立博客系统（FastHTML + SQLite），可直接部署为任何网站的博客子站。
 
 ## 功能
 
@@ -90,4 +90,4 @@ button_url: /contact
 
 - 生产环境用 uvicorn 反代（Nginx → 5010），并把 `static/` 交给 Nginx 直接服务
 - `database/blog.db` 与 `static/uploads/` 需要纳入备份
-- 与原 seosemtool 项目完全解耦，无共享代码依赖
+- 完全独立的单体项目，无外部代码依赖

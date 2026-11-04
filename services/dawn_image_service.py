@@ -165,7 +165,7 @@ class DawnBlogImageService:
     @staticmethod
     async def _download_image(url: str) -> bytes:
         timeout = aiohttp.ClientTimeout(total=25)
-        headers = {"User-Agent": "Mozilla/5.0 (compatible; SEOSEMToolImageLocalizer/1.0)"}
+        headers = {"User-Agent": "Mozilla/5.0 (compatible; DawnCMSImageLocalizer/1.0)"}
         async with aiohttp.ClientSession(timeout=timeout, headers=headers) as session:
             async with session.get(url, allow_redirects=True) as resp:
                 resp.raise_for_status()
@@ -180,7 +180,7 @@ class DawnBlogImageService:
     @staticmethod
     async def _download_binary(url: str, max_size_bytes: int = 25 * 1024 * 1024) -> tuple[bytes, str]:
         timeout = aiohttp.ClientTimeout(total=60)
-        headers = {"User-Agent": "Mozilla/5.0 (compatible; SEOSEMToolMediaFetcher/1.0)"}
+        headers = {"User-Agent": "Mozilla/5.0 (compatible; DawnCMSMediaFetcher/1.0)"}
         async with aiohttp.ClientSession(timeout=timeout, headers=headers) as session:
             async with session.get(url, allow_redirects=True) as resp:
                 resp.raise_for_status()
