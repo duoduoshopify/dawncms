@@ -9,14 +9,14 @@
 {% set home_layout = theme_settings.home_layout or 'Docs' %}
 {% if home_layout == 'Magazine' %}
 {# ===== 杂志居中首页：无侧栏，区块铺满 ===== #}
-<div class="max-w-[1200px] w-full mx-auto px-5 xl:px-10 py-14 lg:py-16">
+<div class="site-container w-full mx-auto px-5 xl:px-10 py-14 lg:py-16">
   {% for sec in home_sections %}
   {% if sec.enabled %}{% include "sections/" + sec.type + ".html" %}{% endif %}
   {% endfor %}
 </div>
 {% else %}
 {# ===== 文档知识库首页：左侧目录侧栏 + 右侧内容 ===== #}
-<div class="max-w-[1366px] w-full mx-auto px-5 xl:px-10">
+<div class="site-container w-full mx-auto px-5 xl:px-10">
   <div class="group flex relative">
     {# 大屏侧栏底色延伸到屏幕左缘 #}
     <div class="hidden lg:block absolute top-0 left-0 h-full w-screen -translate-x-full">
@@ -56,7 +56,7 @@
 </div>
 {% endif %}
 {% else %}
-<section class="max-w-[1200px] mx-auto px-5 xl:px-10 py-16 sm:py-20 md:py-28 text-center">
+<section class="site-container mx-auto px-5 xl:px-10 py-16 sm:py-20 md:py-28 text-center">
   <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--ink)] mb-5">{{ heading }}</h1>
   <p class="max-w-3xl mx-auto text-[1.375rem] leading-8 text-[var(--muted)] mb-10">{{ sub_line }}</p>
   {% if search_action|default('/search') %}
@@ -69,7 +69,7 @@
   {% endif %}
 </section>
 
-<div class="max-w-[1200px] mx-auto px-5 xl:px-10 pb-6 hairline-b">
+<div class="site-container mx-auto px-5 xl:px-10 pb-6 hairline-b">
   <div class="flex flex-wrap gap-x-7 gap-y-3 justify-center">
     <a href="{{ home_url or '/' }}" class="cat-tab {% if not current_cat %}active{% endif %}">{{ t('tab_all', '全部') }}</a>
     {% for c in cats %}
@@ -78,10 +78,10 @@
   </div>
 </div>
 
-{% if notice %}<div class="max-w-[1200px] mx-auto px-5 xl:px-10 pt-6 text-center text-sm text-[var(--accent)]">{{ notice }}</div>{% endif %}
+{% if notice %}<div class="site-container mx-auto px-5 xl:px-10 pt-6 text-center text-sm text-[var(--accent)]">{{ notice }}</div>{% endif %}
 
 {% if featured and not series_mode %}
-<section class="max-w-[1200px] mx-auto px-5 xl:px-10 py-16 sm:py-20">
+<section class="site-container mx-auto px-5 xl:px-10 py-16 sm:py-20">
   <p class="text-sm text-[var(--muted)] mb-6">{{ t('featured_label', '精选') }}</p>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
     {% set p = featured %}{% include "partials/post_card.html" %}
@@ -90,7 +90,7 @@
 </section>
 {% endif %}
 
-<section class="max-w-[1200px] mx-auto px-5 xl:px-10 py-16 sm:py-20 {% if featured and not series_mode %}pt-0 sm:pt-0{% endif %}">
+<section class="site-container mx-auto px-5 xl:px-10 py-16 sm:py-20 {% if featured and not series_mode %}pt-0 sm:pt-0{% endif %}">
   {% if series_mode %}
   <p class="text-sm text-[var(--muted)] mb-6">{{ t('series_label', '连载章节') }}</p>
   <ol class="border-t border-[var(--hairline)]">
@@ -128,7 +128,7 @@
   </div>
   {% elif card_style == 'Directory' %}
   {% for g in cat_groups %}
-  <div class="max-w-[1200px] mx-auto py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+  <div class="site-container mx-auto py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
     <div class="flex items-center md:col-span-2 lg:col-span-3">
       <h2 class="font-semibold text-lg text-[var(--ink)]">{{ g.name }}</h2>
       <a href="{{ g.url }}" class="flex-none ml-auto inline-flex items-center text-sm text-[var(--muted)] hover:opacity-80">{{ t('view_all', '查看全部 →') }}</a>
@@ -152,7 +152,7 @@
   {% endif %}
 </section>
 
-<nav class="max-w-[1200px] mx-auto px-5 xl:px-10 pb-16 flex items-center justify-center gap-6">
+<nav class="site-container mx-auto px-5 xl:px-10 pb-16 flex items-center justify-center gap-6">
   {% if page > 1 %}
   <a href="{{ base_url }}{{ page - 1 }}" rel="prev" class="btn-secondary">{{ t('prev_page', '← 上一页') }}</a>
   {% else %}

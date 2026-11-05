@@ -90,7 +90,17 @@
 
 ## 容器宽度约定
 
-主容器（导航、页脚、列表、文章外层）请统一使用 `max-w-[1200px]`，不要用自定义宽度值。后台「铺陈 · 宽幕」版式通过覆盖 `max-w-[1200px]`（及兼容历史主题的 `max-w-[1366px]`）在 ≥1400px 视口放宽到 1560px——使用其他宽度值的容器在宽幕模式下不会跟随变宽。
+主容器（导航、页脚、列表、文章外层）统一使用语义类 `site-container`，阅读容器（正文、说明页）使用 `article-container`，不要在模板里写 `max-w-[1200px]` 之类的具体宽度值。两者由核心注入的 CSS 变量驱动：
+
+```css
+:root {
+  --site-container-max: 1200px;   /* .site-container */
+  --article-container-max: 760px; /* .article-container */
+  --site-gutter: 24px;            /* 预留：容器内边距 */
+}
+```
+
+后台「页面版式」只切换变量：`layout-full`（铺陈）在 ≥1400px 视口把 `--site-container-max` 提到 1560px，`layout-wide`（无际）设为 `none`。核心对旧式 `max-w-[1200px]/[1366px]` 的覆盖保留一个版本用于兼容未迁移的第三方主题，新主题请直接使用语义类。
 
 ---
 

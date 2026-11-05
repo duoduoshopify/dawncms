@@ -62,6 +62,7 @@ DAWN_DEFAULT_PACKAGE = "shimo"
 DAWN_LAYOUTS = {
     "boxed": {"label": "书函 · 1200px", "desc": "居中留白，适合长文阅读"},
     "full": {"label": "铺陈 · 宽幕", "desc": "1560px 宽幕（≥1400px 屏生效），侧栏加宽"},
+    "wide": {"label": "无际 · 通栏", "desc": "取消最大宽度，内容铺满整个视口"},
 }
 
 # ---------- 设计 token（shimo 宣纸墨韵默认值；全站 CSS 使用这套变量名） ----------
@@ -653,11 +654,18 @@ def dawn_set_layout_mode(mode):
 
 
 def dawn_layout_override_css():
-    """宽屏模式（≥1400px 放宽到 1560px）。用 body 前缀提升优先级，不依赖 !important 和样式顺序"""
-    if dawn_get_layout_mode() == "boxed":
-        return ""
-    return """
+    """语义容器与版式覆盖。容器契约为 .site-container（宽度由 --site-container-max 决定），
+    版式切换只改变量；旧式 Tailwind 宽度类的覆盖保留一个版本，兼容未迁移的第三方主题。"""
+    base = """
+:root{--site-container-max:1200px;--article-container-max:760px;--site-gutter:24px}
+.site-container{width:100%;max-width:var(--site-container-max);margin-inline:auto}
+.article-container{width:100%;max-width:var(--article-container-max);margin-inline:auto}
+"""
+    mode = dawn_get_layout_mode()
+    if mode == "full":
+        return base + """
 @media (min-width:1400px){
+body.layout-full{--site-container-max:1560px}
 body .max-w-\\[1200px\\],
 body .max-w-\\[1366px\\]{max-width:1560px}
 body .article-grid{grid-template-columns:280px minmax(0,1fr) 260px;gap:40px}
@@ -665,6 +673,24 @@ body .article-grid .doc-main{max-width:none}
 body .article-grid .doc-content{font-size:1.12rem}
 }
 """
+    if mode == "wide":
+        return base + """
+body.layout-wide{--site-container-max:none}
+body .max-w-\\[1200px\\],
+body .max-w-\\[1366px\\]{max-width:none}
+"""
+    return base
+
+
+def dawn_migrate_page_width():
+    """旧版主题设置 page_width=Full width 已并入全局版式：未显式选过版式时迁移为 wide（一次性）。"""
+    if _dawn_get_setting("layout_mode"):
+        return
+    try:
+        if dawn_theme_settings().get("page_width") == "Full width":
+            _dawn_set_setting("layout_mode", "wide")
+    except Exception:
+        pass
 
 
 # ---------- Jinja2 模板渲染（沙盒） ----------

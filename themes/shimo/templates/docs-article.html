@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="hairline-b">
-  <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center text-sm">
+  <div class="site-container mx-auto px-6 py-4 flex items-center text-sm">
     <a href="{{ docs_base }}/docs" class="text-[var(--faint)] hover:text-[var(--accent)]">{{ t('docs_center', '文档中心') }}</a>
     <span class="text-[var(--hairline-strong)] mx-2">/</span>
     <span class="text-[var(--muted)]">{{ doc.title }}</span>
   </div>
 </div>
-<div class="max-w-[1200px] mx-auto px-6 py-10 grid gap-6 justify-center grid-cols-1 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_230px]">
+<div class="site-container mx-auto px-6 py-10 grid gap-6 justify-center grid-cols-1 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_230px]">
   <div>
     <div class="doc-col p-4 bg-[var(--wash)] border border-[var(--hairline-soft)] rounded-xl hidden lg:block">
       <a href="{{ docs_base }}/docs" class="block text-xs text-[var(--faint)] hover:text-[var(--accent)] mb-4">← {{ t('docs_center', '文档中心') }}</a>

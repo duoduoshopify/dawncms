@@ -136,6 +136,7 @@ app.exception_handlers[500] = _dawn_500
 @app.on_event("startup")
 async def _dawn_startup():
     await dawn_init_blog_db()
+    dawn_themes.dawn_migrate_page_width()
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@
     </form>
     {% endif %}
   </div>
-  <div class="max-w-[1200px] mx-auto px-6 pb-8 hairline-b">
+  <div class="site-container mx-auto px-6 pb-8 hairline-b">
     <div class="flex flex-wrap gap-x-7 gap-y-3 justify-center">
       <a href="{{ home_url or '/' }}" class="cat-tab {% if not current_cat %}active{% endif %}">{{ t('tab_all', '全部') }}</a>
       {% for c in cats %}
@@ -35,11 +35,11 @@
 
 {% include "partials/about_card.html" %}
 
-{% if notice %}<div class="max-w-[1200px] mx-auto px-6 pt-6 text-center text-sm text-[var(--accent)]">{{ notice }}</div>{% endif %}
+{% if notice %}<div class="site-container mx-auto px-6 pt-6 text-center text-sm text-[var(--accent)]">{{ notice }}</div>{% endif %}
 
 {% if featured and not series_mode %}
 <section>
-  <div class="max-w-[1200px] mx-auto px-6 py-12">
+  <div class="site-container mx-auto px-6 py-12">
     <div class="mb-6">
       <span class="eyebrow block mb-2">FEATURED</span>
       <h2 class="ff-serif text-2xl font-black text-[var(--ink)]">{{ t('featured_title', '卷首选读') }}</h2>
@@ -96,7 +96,7 @@
 {% endif %}
 
 <section>
-  <div class="max-w-[1200px] mx-auto px-6 pb-14">
+  <div class="site-container mx-auto px-6 pb-14">
     <div class="mb-8 flex items-baseline">
       <div>
         <span class="eyebrow block mb-2">ARCHIVE</span>
@@ -128,7 +128,7 @@
   </div>
 </section>
 
-<nav class="max-w-[1200px] mx-auto px-6 pb-6 flex items-center justify-center gap-6">
+<nav class="site-container mx-auto px-6 pb-6 flex items-center justify-center gap-6">
   {% if page > 1 %}
   <a href="{{ base_url }}{{ page - 1 }}" rel="prev" class="px-5 py-2 rounded-full text-sm border border-[var(--hairline)] text-[var(--ink)] hover:border-[var(--accent)] hover:text-[var(--accent)]">{{ t('prev_page', '← 上一页') }}</a>
   {% else %}

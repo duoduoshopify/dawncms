@@ -217,11 +217,9 @@ def dawn_setup(app):
                     Input(type="radio", name="layout", value=k, checked=(k == cur_layout), cls="hidden peer"),
                     Div(
                         Div(
-                            Div(cls="rounded-md border border-slate-600 bg-slate-800 h-3 w-3/4 mx-auto"),
-                            Div(cls="rounded-md border border-slate-600 bg-slate-800 h-8 w-3/5 mx-auto mt-2") if k == "boxed" else
-                            Div(cls="rounded-md border border-slate-600 bg-slate-800 h-8 w-11/12 mx-auto mt-2"),
-                            Div(cls="rounded-md border border-slate-600 bg-slate-800 h-3 w-2/3 mx-auto mt-2") if k == "boxed" else
-                            Div(cls="rounded-md border border-slate-600 bg-slate-800 h-3 w-10/12 mx-auto mt-2"),
+                            Div(cls="rounded-md border border-slate-600 bg-slate-800 h-3 " + ("w-3/4 mx-auto" if k == "boxed" else "w-full")),
+                            Div(cls="rounded-md border border-slate-600 bg-slate-800 h-8 mt-2 " + ("w-3/5 mx-auto" if k == "boxed" else "w-11/12 mx-auto" if k == "full" else "w-full")),
+                            Div(cls="rounded-md border border-slate-600 bg-slate-800 h-3 mt-2 " + ("w-2/3 mx-auto" if k == "boxed" else "w-10/12 mx-auto" if k == "full" else "w-full")),
                             cls="py-4"
                         ),
                         Div(
@@ -267,6 +265,7 @@ def dawn_setup(app):
                 fields.append(Div(
                     Label(spec.get("label", name), cls=DAWN_LABEL),
                     field,
+                    P("⚠ 已废弃：页面宽度改由上方「页面版式」统一控制（「无际 · 通栏」等同于原 Full width），本项保留仅为兼容旧主题。", cls="text-amber-400/90 text-xs mt-1") if name == "page_width" else None,
                     P(spec["description"], cls="text-slate-500 text-xs mt-1") if spec.get("description") else None,
                     cls="mb-3"
                 ))
@@ -291,7 +290,7 @@ def dawn_setup(app):
               for k, t in themes_map.items() if t.get("custom")],
             Div(
                 H2("📐 页面版式", cls="text-white font-bold text-sm mb-3"),
-                P("点击即切换：书函为 1200px 居中留白；铺陈为 1560px 宽幕（侧栏加宽、正文字号微调）。", cls="text-slate-500 text-xs mb-1"),
+                P("点击即切换：书函 1200px 居中留白；铺陈 1560px 宽幕（侧栏加宽、正文字号微调）；无际取消宽度限制、内容铺满视口。", cls="text-slate-500 text-xs mb-1"),
                 P("⚠ 宽幕仅在浏览器视口 ≥1400px 时生效：1366×768 等小屏设备切换后前台不会有变化，属正常设计，并非保存失败。", cls="text-amber-400/90 text-xs mb-3"),
                 Form(
                     Div(*layout_cards, cls="grid grid-cols-1 md:grid-cols-2 gap-4"),

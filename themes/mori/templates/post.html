@@ -14,7 +14,7 @@
 <div class="doc-shell">
   <div class="doc-progress"></div>
   <div class="hairline-b">
-    <div class="max-w-[1200px] mx-auto px-6 py-4 flex items-center">
+    <div class="site-container mx-auto px-6 py-4 flex items-center">
       <a href="{{ home_url or '/' }}" class="text-[var(--faint)] hover:text-[var(--ink)] text-sm">{{ t('home', '首页') }}</a>
       <span class="text-[var(--hairline-strong)] mx-2">/</span>
       <a href="{{ a.category_url or ('/' + a.category_slug) }}" class="text-[var(--ink-2)] hover:text-[var(--accent)] text-sm font-medium">{{ a.category }}</a>
@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <div class="article-grid max-w-[1200px] mx-auto px-6 py-10 grid gap-6 grid-cols-1 xl:grid-cols-[250px_minmax(0,1fr)_230px] lg:grid-cols-[minmax(0,1fr)_230px]">
+  <div class="article-grid site-container mx-auto px-6 py-10 grid gap-6 grid-cols-1 xl:grid-cols-[250px_minmax(0,1fr)_230px] lg:grid-cols-[minmax(0,1fr)_230px]">
 
     <!-- 左栏：专栏导航 -->
     <div>
