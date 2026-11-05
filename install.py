@@ -31,13 +31,12 @@ def main() -> int:
     os_name = "Windows" if sys.platform == "win32" else ("macOS" if sys.platform == "darwin" else "Linux")
     print(f"DawnCMS 一键安装 · {os_name} · Python {sys.version.split()[0]}")
 
-    if sys.version_info < (3, 10):
-        print("\n[错误] 需要 Python 3.10 或更高版本（推荐 3.12）。")
-        print("  下载地址: https://www.python.org/downloads/")
+    if sys.version_info < (3, 12):
+        print(f"\n[错误] 需要 Python 3.12 或更高版本（当前 {sys.version_info.major}.{sys.version_info.minor}）。")
+        print("  锁定依赖 httpcore2 等要求 Python ≥3.11，且整套依赖仅在 3.12 完整测试。")
+        print("  Ubuntu 22.04:  sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt install python3.12 python3.12-venv")
+        print("  其他系统:      https://www.python.org/downloads/")
         return 1
-    if sys.version_info[:2] != (3, 12):
-        print(f"[提示] 当前 Python {sys.version_info.major}.{sys.version_info.minor}，"
-              "官方测试环境为 3.12，如遇到问题请改用 3.12。")
 
     step("创建虚拟环境 venv/")
     if venv_python().exists():

@@ -26,12 +26,12 @@ bash install.sh && ./start.sh
 # Windows：双击 install.bat 安装，然后双击 start.bat 启动
 ```
 
-唯一前置要求：Python 3.10+（推荐 3.12，Windows 安装时勾选 "Add python.exe to PATH"）。
+唯一前置要求：Python 3.12+（锁定依赖中的 httpcore2 等要求 ≥3.11，且整套依赖仅在 3.12 完整测试；Windows 安装时勾选 "Add python.exe to PATH"；Ubuntu 22.04 需先通过 deadsnakes PPA 安装 python3.12）。
 
 **手动安装**：
 
 ```bash
-python3 -m venv venv && source venv/bin/activate
+python3.12 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env   # 修改站点名、域名、管理密码、SESSION_SECRET
 python dawn_main.py    # 默认端口 5010
