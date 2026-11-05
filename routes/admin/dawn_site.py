@@ -291,7 +291,8 @@ def dawn_setup(app):
               for k, t in themes_map.items() if t.get("custom")],
             Div(
                 H2("📐 页面版式", cls="text-white font-bold text-sm mb-3"),
-                P("点击即切换：书函为 1200px 居中留白；铺陈为 1560px 宽幕（侧栏加宽、正文字号微调，仅在 ≥1400px 大屏生效）。", cls="text-slate-500 text-xs mb-3"),
+                P("点击即切换：书函为 1200px 居中留白；铺陈为 1560px 宽幕（侧栏加宽、正文字号微调）。", cls="text-slate-500 text-xs mb-1"),
+                P("⚠ 宽幕仅在浏览器视口 ≥1400px 时生效：1366×768 等小屏设备切换后前台不会有变化，属正常设计，并非保存失败。", cls="text-amber-400/90 text-xs mb-3"),
                 Form(
                     Div(*layout_cards, cls="grid grid-cols-1 md:grid-cols-2 gap-4"),
                     method="post", action="/dadmin/appearance/layout"

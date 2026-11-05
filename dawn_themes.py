@@ -658,7 +658,8 @@ def dawn_layout_override_css():
         return ""
     return """
 @media (min-width:1400px){
-body .max-w-\\[1200px\\]{max-width:1560px}
+body .max-w-\\[1200px\\],
+body .max-w-\\[1366px\\]{max-width:1560px}
 body .article-grid{grid-template-columns:280px minmax(0,1fr) 260px;gap:40px}
 body .article-grid .doc-main{max-width:none}
 body .article-grid .doc-content{font-size:1.12rem}
