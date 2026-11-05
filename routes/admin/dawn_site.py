@@ -209,7 +209,10 @@ def dawn_setup(app):
                 )
             )
 
-        from dawn_themes import DAWN_LAYOUTS, dawn_get_layout_mode, dawn_get_package, dawn_theme_settings
+        from dawn_themes import DAWN_LAYOUTS, dawn_get_layout_mode, dawn_get_package, dawn_theme_settings, _dawn_get_setting
+        custom_css_val = _dawn_get_setting("custom_css", "")
+        custom_head_val = _dawn_get_setting("custom_head_code", "")
+        custom_body_val = _dawn_get_setting("custom_body_code", "")
         cur_layout = dawn_get_layout_mode()
         layout_cards = [
             Div(
@@ -312,6 +315,40 @@ def dawn_setup(app):
                 cls="mb-6 p-4 rounded-xl border border-slate-800 bg-slate-900/40"
             ),
             Div(
+                H2("🧩 自定义代码", cls="text-white font-bold text-sm mb-3"),
+                P("自定义 CSS 注入全站 </head> 之前（在全部主题样式之后，优先级最高）；head / body 代码原样注入对应位置，可用于统计、验证 meta、第三方挂件。仅管理员可编辑，请确保代码可信。", cls="text-slate-500 text-xs mb-3"),
+                Form(
+                    Label("自定义 CSS", cls=DAWN_LABEL),
+                    Textarea(custom_css_val, name="custom_css", rows=5, cls=DAWN_INPUT,
+                             placeholder="例如：:root{--accent:#0f6bff}"),
+                    Label("head 注入代码（</head> 前）", cls=DAWN_LABEL + " mt-3"),
+                    Textarea(custom_head_val, name="custom_head_code", rows=3, cls=DAWN_INPUT,
+                             placeholder='<meta name="..." content="..."> 或 <script>...</script>'),
+                    Label("body 注入代码（</body> 前）", cls=DAWN_LABEL + " mt-3"),
+                    Textarea(custom_body_val, name="custom_body_code", rows=3, cls=DAWN_INPUT,
+                             placeholder="<script>...</script>"),
+                    Button("保存自定义代码", type="submit", cls=DAWN_BTN + " mt-3"),
+                    method="post", action="/dadmin/appearance/custom_code"
+                ),
+                cls="mb-6 p-4 rounded-xl border border-slate-800 bg-slate-900/40"
+            ),
+            Div(
+                H2("💾 配置备份", cls="text-white font-bold text-sm mb-3"),
+                P("导出全站配置（主题、版式、主题设置、首页区块、自定义代码等 site_settings 全部内容）为 JSON；导入按 key 覆盖写回，即「一键恢复」。", cls="text-slate-500 text-xs mb-3"),
+                Div(
+                    A("⬇️ 导出配置 JSON", href="/dadmin/settings/export", cls=DAWN_BTN),
+                    Form(
+                        Input(type="file", name="settings_json", accept=".json", required=True,
+                              cls="text-slate-400 text-sm file:mr-3 file:px-4 file:py-2 file:rounded-lg file:border-0 file:bg-emerald-600 file:text-white file:text-sm file:font-semibold hover:file:bg-emerald-500"),
+                        Button("导入配置", type="submit", cls=DAWN_BTN),
+                        method="post", action="/dadmin/settings/import", enctype="multipart/form-data",
+                        cls="flex items-center gap-3"
+                    ),
+                    cls="flex items-center gap-4 flex-wrap"
+                ),
+                cls="mb-6 p-4 rounded-xl border border-slate-800 bg-slate-900/40"
+            ),
+            Div(
                 H2("自定义主题开发", cls="text-white font-bold text-sm mb-2"),
                 P("主题 = 一组 CSS 变量（纸底/墨色/强调色/边框等 24 个 token）。完整字段说明见前台 /docs 文档中心；也可用环境变量 SITE_THEME 指定默认主题。", cls="text-slate-500 text-xs"),
                 cls="p-4 rounded-xl border border-slate-800 bg-slate-900/40"
@@ -348,6 +385,54 @@ def dawn_setup(app):
         if dawn_set_layout_mode(layout):
             return RedirectResponse("/dadmin/appearance?msg=版式已切换，前台立即生效", status_code=303)
         return RedirectResponse("/dadmin/appearance?msg=未知版式", status_code=303)
+
+    @app.post("/dadmin/appearance/custom_code")
+    async def admin_appearance_custom_code(session, custom_css: str = "", custom_head_code: str = "", custom_body_code: str = ""):
+        if not _dawn_require_admin(session):
+            return RedirectResponse("/dadmin/login")
+        from dawn_themes import _dawn_set_setting
+        _dawn_set_setting("custom_css", custom_css)
+        _dawn_set_setting("custom_head_code", custom_head_code)
+        _dawn_set_setting("custom_body_code", custom_body_code)
+        return RedirectResponse("/dadmin/appearance?msg=自定义代码已保存，前台立即生效", status_code=303)
+
+    @app.get("/dadmin/settings/export")
+    async def admin_settings_export(session):
+        if not _dawn_require_admin(session):
+            return RedirectResponse("/dadmin/login")
+        import sqlite3
+        from dawn_themes import DAWN_DB_PATH
+        db = sqlite3.connect(DAWN_DB_PATH, timeout=5)
+        rows = db.execute("SELECT key, value FROM site_settings ORDER BY key").fetchall()
+        db.close()
+        payload = json.dumps({
+            "dawncms_settings": 1,
+            "exported_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "settings": dict(rows),
+        }, ensure_ascii=False, indent=2)
+        return Response(payload.encode("utf-8"), media_type="application/json",
+                        headers={"Content-Disposition": "attachment; filename=dawncms-settings.json"})
+
+    @app.post("/dadmin/settings/import")
+    async def admin_settings_import(request, session):
+        if not _dawn_require_admin(session):
+            return RedirectResponse("/dadmin/login")
+        from dawn_themes import _dawn_set_setting
+        form = await request.form()
+        upload = form.get("settings_json")
+        if not upload or not getattr(upload, "filename", ""):
+            return RedirectResponse("/dadmin/appearance?msg=请选择 JSON 文件", status_code=303)
+        try:
+            data = json.loads((await upload.read()).decode("utf-8"))
+            settings = data.get("settings") if isinstance(data, dict) else None
+            if not isinstance(settings, dict) or \
+                    not all(isinstance(k, str) and isinstance(v, str) for k, v in settings.items()):
+                raise ValueError("bad settings payload")
+        except Exception:
+            return RedirectResponse("/dadmin/appearance?msg=文件格式不正确，请使用本系统导出的配置 JSON", status_code=303)
+        for k, v in settings.items():
+            _dawn_set_setting(k, v)
+        return RedirectResponse(f"/dadmin/appearance?msg=已导入 {len(settings)} 项配置并生效", status_code=303)
 
     @app.post("/dadmin/appearance/upload_zip")
     async def admin_appearance_upload_zip(request, session):

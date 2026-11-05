@@ -93,6 +93,9 @@ window.addEventListener('message', function(e){
         "layout_css": dawn_themes.dawn_layout_override_css(),
         "layout_mode": dawn_themes.dawn_get_layout_mode(),
         "page_width": dawn_themes.dawn_theme_settings().get("page_width", "Page width"),
+        "custom_css": dawn_themes._dawn_get_setting("custom_css", ""),
+        "custom_head": dawn_themes._dawn_get_setting("custom_head_code", ""),
+        "custom_body": dawn_themes._dawn_get_setting("custom_body_code", ""),
     }
 
 

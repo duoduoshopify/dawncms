@@ -41,6 +41,8 @@
 <style>{{ base_css }}</style>
 <style>{{ doc_css }}</style>
 {% if layout_css %}<style>{{ layout_css }}</style>{% endif %}
+{% if custom_css %}<style>{{ custom_css|safe }}</style>{% endif %}
+{% if custom_head %}{{ custom_head|safe }}{% endif %}
 {% block head %}{% endblock %}
 </head>
 <body class="min-h-screen flex flex-col antialiased overflow-x-hidden layout-{{ layout_mode }} pw-{{ 'full' if page_width == 'Full width' else 'page' }}">
@@ -52,6 +54,7 @@
 </main>
 {% include "partials/footer.html" %}
 {% if global_js %}{{ global_js|safe }}{% endif %}
+{% if custom_body %}{{ custom_body|safe }}{% endif %}
 {% if theme_js %}<script>{{ theme_js|safe }}</script>{% endif %}
 {% block scripts %}{% endblock %}
 </body>
