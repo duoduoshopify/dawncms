@@ -4,6 +4,8 @@ DawnCMS 独立博客系统（FastHTML + SQLite），可直接部署为任何网�
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+**[🌐 官网](https://dawncms.com/) · [👀 在线演示](https://dawncms.com/)**
+
 ## 功能
 
 - **前台**：文章列表（精选 + 分页）、分类页、文章详情（自动 TOC / 上一篇下一篇 / 相关文章推荐 / 外链新窗口 / 代码复制按钮）、站内搜索（owenboker 主题带 ⌘K 快速搜索弹窗，实时联想，多语言站搜对应译文）、`sitemap.xml`、`robots.txt`、JSON-LD（Article / BreadcrumbList / ItemList）
