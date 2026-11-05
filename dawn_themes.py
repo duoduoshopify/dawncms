@@ -423,7 +423,7 @@ def dawn_theme_editor_state(theme_key) -> dict:
         dv = _dawn_get_setting(f"theme_{theme_key}_draft_{name}", "")
         settings[name] = dv if dv != "" else v
     sections_raw = _dawn_get_setting(f"theme_{theme_key}_sections_draft", "") or _dawn_get_setting(f"theme_{theme_key}_sections", "")
-    specs = {s["type"]: s for s in pkg.home_sections_schema()}
+    specs, _theme_types = _dawn_section_specs_with_plugins(pkg)
     saved = []
     if sections_raw:
         try:
@@ -445,6 +445,20 @@ def dawn_theme_editor_state(theme_key) -> dict:
                          "settings": merged, "schema": spec.get("settings") or {}})
     return {"settings": settings, "sections": sections, "schema": schema,
             "has_draft": dawn_theme_has_draft(theme_key)}
+
+
+def dawn_reset_theme_settings(theme_key=None) -> int:
+    """当前主题全部设置恢复默认（删除存储值，回退 theme.json 声明的 default）。返回清除项数。"""
+    theme_key = theme_key or dawn_get_active_theme_key()
+    pkg = dawn_get_package(theme_key)
+    if not pkg:
+        return 0
+    db = sqlite3.connect(DAWN_DB_PATH, timeout=5)
+    cur = db.execute("DELETE FROM site_settings WHERE key LIKE ?", (f"theme_{theme_key}_set_%",))
+    db.commit()
+    n = cur.rowcount
+    db.close()
+    return max(n, 0)
 
 
 def dawn_theme_settings(theme_key=None):
@@ -552,13 +566,43 @@ def dawn_theme_publish_draft(theme_key) -> int:
     return n
 
 
+def _dawn_section_specs_with_plugins(pkg):
+    """主题 home_sections 声明 + 插件经 home_section_types 钩子注册的区块类型。
+    返回 (specs, theme_types)：theme_types 为主题自带类型，其余为插件类型。"""
+    specs = {s["type"]: s for s in pkg.home_sections_schema()}
+    theme_types = set(specs)
+    try:
+        from plugins import dawn_collect_hooks_sync
+        for res in dawn_collect_hooks_sync("home_section_types"):
+            if isinstance(res, list):
+                for s in res:
+                    if isinstance(s, dict) and s.get("type") and s["type"] not in specs:
+                        specs[s["type"]] = s
+    except Exception:
+        pass
+    return specs, theme_types
+
+
+def _dawn_render_plugin_section(section_type: str, settings: dict) -> str:
+    """调用 render_section 钩子渲染插件区块，返回第一个非空 HTML。"""
+    try:
+        from plugins import dawn_collect_hooks_sync
+        for res in dawn_collect_hooks_sync("render_section",
+                                           section={"type": section_type, "settings": settings}):
+            if isinstance(res, str) and res:
+                return res
+    except Exception:
+        pass
+    return ""
+
+
 def dawn_theme_home_sections(theme_key=None) -> list:
     """首页区块列表：[{type, label, enabled, settings:{name:value}, schema}]。预览上下文优先读草稿。"""
     theme_key = theme_key or dawn_get_active_theme_key()
     pkg = dawn_get_package(theme_key)
     if not pkg:
         return []
-    specs = {s["type"]: s for s in pkg.home_sections_schema()}
+    specs, theme_types = _dawn_section_specs_with_plugins(pkg)
     if not specs:
         return []
     key = f"theme_{theme_key}_sections"
@@ -584,9 +628,12 @@ def dawn_theme_home_sections(theme_key=None) -> list:
         merged = {}
         for name, sspec in (spec.get("settings") or {}).items():
             merged[name] = str(stored.get(name, sspec.get("default", "")))
-        out.append({"type": t, "label": spec.get("label", t),
-                    "enabled": bool(sv.get("enabled", True)),
-                    "settings": merged, "schema": spec.get("settings") or {}})
+        sec = {"type": t, "label": spec.get("label", t),
+               "enabled": bool(sv.get("enabled", True)),
+               "settings": merged, "schema": spec.get("settings") or {}}
+        if t not in theme_types:
+            sec["html"] = _dawn_render_plugin_section(t, merged)
+        out.append(sec)
     return out
 
 
@@ -595,7 +642,7 @@ def dawn_set_theme_home_sections(theme_key, sections: list, draft: bool = False)
     pkg = dawn_get_package(theme_key)
     if not pkg:
         return False
-    specs = {s["type"]: s for s in pkg.home_sections_schema()}
+    specs, _theme_types = _dawn_section_specs_with_plugins(pkg)
     if not specs:
         return False
     clean = []

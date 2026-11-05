@@ -11,7 +11,7 @@
 {# ===== 杂志居中首页：无侧栏，区块铺满 ===== #}
 <div class="site-container w-full mx-auto px-5 xl:px-10 py-14 lg:py-16">
   {% for sec in home_sections %}
-  {% if sec.enabled %}{% include "sections/" + sec.type + ".html" %}{% endif %}
+  {% if sec.enabled %}{% if sec.html %}{{ sec.html|safe }}{% else %}{% include "sections/" + sec.type + ".html" %}{% endif %}{% endif %}
   {% endfor %}
 </div>
 {% else %}
@@ -48,7 +48,7 @@
 
         {% include "partials/about_card.html" %}
         {% for sec in home_sections %}
-        {% if sec.enabled and sec.type not in ('search', 'newsletter') %}{% include "sections/" + sec.type + ".html" %}{% endif %}
+        {% if sec.enabled and sec.type not in ('search', 'newsletter') %}{% if sec.html %}{{ sec.html|safe }}{% else %}{% include "sections/" + sec.type + ".html" %}{% endif %}{% endif %}
         {% endfor %}
       </div>
     </div>

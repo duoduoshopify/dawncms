@@ -11,7 +11,31 @@ from pathlib import Path
 
 DAWN_PLUGIN_META_KEYS = ("key", "label", "group", "icon", "url")
 
+# 插件 API 版本：插件可在 DAWN_PLUGIN 中声明 "api_version": 1，
+# 主版本不一致时跳过加载并在插件管理页标注，避免旧插件在新核心里静默出错。
+DAWN_PLUGIN_API = 1
+
 _dawn_loaded: list = []
+
+
+def _dawn_disabled_plugins() -> set:
+    """site_settings.disabled_plugins（逗号分隔的插件目录名）。启停需重启生效。"""
+    try:
+        from dawn_themes import _dawn_get_setting
+        raw = _dawn_get_setting("disabled_plugins", "")
+        return {p.strip() for p in raw.split(",") if p.strip()}
+    except Exception:
+        return set()
+
+
+def dawn_set_plugin_enabled(name: str, enabled: bool) -> None:
+    disabled = _dawn_disabled_plugins()
+    if enabled:
+        disabled.discard(name)
+    else:
+        disabled.add(name)
+    from dawn_themes import _dawn_set_setting
+    _dawn_set_setting("disabled_plugins", ",".join(sorted(disabled)))
 
 
 def dawn_load_plugins(app) -> list:
@@ -27,15 +51,28 @@ def dawn_load_plugins(app) -> list:
         return _dawn_loaded
 
     base = Path(__file__).parent
+    disabled = _dawn_disabled_plugins()
     sys.path.insert(0, str(base))
     try:
         for child in sorted(base.iterdir()):
             plugin_file = child / "plugin.py"
             if not child.is_dir() or child.name.startswith("_") or not plugin_file.exists():
                 continue
+            if child.name in disabled:
+                _dawn_loaded.append({"name": child.name, "status": "disabled"})
+                print(f"[plugins] 已停用，跳过: {child.name}")
+                continue
             try:
                 mod = importlib.import_module(f"{child.name}.plugin")
                 meta = {k: getattr(mod, "DAWN_PLUGIN", {}).get(k) for k in DAWN_PLUGIN_META_KEYS}
+                declared_api = getattr(mod, "DAWN_PLUGIN", {}).get("api_version")
+                meta["api_version"] = declared_api
+                if declared_api is not None and declared_api != DAWN_PLUGIN_API:
+                    meta["name"] = child.name
+                    meta["status"] = f"error: api_version {declared_api} 与核心 {DAWN_PLUGIN_API} 不兼容"
+                    _dawn_loaded.append(meta)
+                    print(f"[plugins] api_version 不兼容，跳过 {child.name}")
+                    continue
                 if hasattr(mod, "dawn_setup"):
                     mod.dawn_setup(app)
                 meta["name"] = child.name
@@ -74,6 +111,12 @@ def dawn_register_hook(name: str, func) -> None:
     - head_extra(ctx=dict) -> str | None（同步钩子）
       前台渲染时调用，返回的 HTML 片段并入 <head> 的 extra_head 插槽
       （ctx 含 a=文章字典 / is_home / current_cat / tag / series 等定位信息）
+    - home_section_types() -> list[dict]（同步钩子）
+      注册首页区块类型 [{type, label, settings:{name:schema}}]，schema 与主题
+      theme.json 的 home_sections 设置项同构；注册的区块会出现在主题编辑器的区块列表中
+    - render_section(section=dict) -> str | None（同步钩子）
+      渲染插件注册的区块（section 含 type/settings），返回 HTML 片段；
+      主题模板优先使用渲染结果，缺失时回退主题自带 sections/{type}.html
     """
     DAWN_HOOKS.setdefault(name, []).append(func)
 

@@ -265,16 +265,32 @@ def dawn_setup(app):
                 else:
                     field = Input(type="text", name=name, value=val, cls=DAWN_INPUT,
                                   placeholder=spec.get("placeholder", ""))
+                default_val = str(spec.get("default", ""))
                 fields.append(Div(
-                    Label(spec.get("label", name), cls=DAWN_LABEL),
+                    Div(
+                        Label(spec.get("label", name), cls=DAWN_LABEL + " mb-0"),
+                        Span("已修改", cls="text-amber-400/90 text-xs font-semibold") if val != default_val
+                        else Span("默认", cls="text-slate-600 text-xs"),
+                        cls="flex items-baseline justify-between mb-1"
+                    ),
                     field,
                     P("⚠ 已废弃：页面宽度改由上方「页面版式」统一控制（「无际 · 通栏」等同于原 Full width），本项保留仅为兼容旧主题。", cls="text-amber-400/90 text-xs mt-1") if name == "page_width" else None,
                     P(spec["description"], cls="text-slate-500 text-xs mt-1") if spec.get("description") else None,
+                    P(f"默认值：{default_val or '（空）'}", cls="text-slate-600 text-xs mt-1") if val != default_val else None,
                     cls="mb-3"
                 ))
             settings_block = Div(
-                H2("⚙️ 主题设置", cls="text-white font-bold text-sm mb-3"),
-                P(f"当前主题「{pkg.name}」暴露的自定义选项（保存后立即生效）。", cls="text-slate-500 text-xs mb-3"),
+                Div(
+                    H2("⚙️ 主题设置", cls="text-white font-bold text-sm"),
+                    Form(
+                        Button("全部恢复默认", type="submit",
+                               cls="px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 text-xs font-semibold hover:border-red-500 hover:text-red-400"),
+                        method="post", action="/dadmin/appearance/settings/reset",
+                        **{"onsubmit": "return confirm('将当前主题全部设置恢复为默认值？此操作立即生效。')"}
+                    ),
+                    cls="flex items-center justify-between mb-3"
+                ),
+                P(f"当前主题「{pkg.name}」暴露的自定义选项（保存后立即生效）。标注「已修改」的为自定义值，未标注的跟随 theme.json 默认值。", cls="text-slate-500 text-xs mb-3"),
                 Form(*fields, Button("保存主题设置", type="submit", cls=DAWN_BTN),
                      method="post", action="/dadmin/appearance/settings"),
                 cls="mb-6 p-4 rounded-xl border border-slate-800 bg-slate-900/40"
@@ -385,6 +401,14 @@ def dawn_setup(app):
         if dawn_set_layout_mode(layout):
             return RedirectResponse("/dadmin/appearance?msg=版式已切换，前台立即生效", status_code=303)
         return RedirectResponse("/dadmin/appearance?msg=未知版式", status_code=303)
+
+    @app.post("/dadmin/appearance/settings/reset")
+    async def admin_appearance_settings_reset(session):
+        if not _dawn_require_admin(session):
+            return RedirectResponse("/dadmin/login")
+        from dawn_themes import dawn_reset_theme_settings
+        n = dawn_reset_theme_settings()
+        return RedirectResponse(f"/dadmin/appearance?msg=已恢复默认（清除 {n} 项自定义设置）", status_code=303)
 
     @app.post("/dadmin/appearance/custom_code")
     async def admin_appearance_custom_code(session, custom_css: str = "", custom_head_code: str = "", custom_body_code: str = ""):

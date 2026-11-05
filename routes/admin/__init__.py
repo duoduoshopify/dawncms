@@ -5,7 +5,7 @@
 # routes/admin/__init__.py
 # 后台聚合入口：布局壳 + 各功能模块
 
-from . import dawn_auth, dawn_dashboard, dawn_posts, dawn_taxonomy, dawn_media, dawn_users, dawn_site
+from . import dawn_auth, dawn_dashboard, dawn_posts, dawn_taxonomy, dawn_media, dawn_users, dawn_site, dawn_plugins
 from .dawn_shell import DawnAdminLangMiddleware
 
 
@@ -18,3 +18,4 @@ def dawn_setup(app):
     dawn_media.dawn_setup(app)
     dawn_users.dawn_setup(app)
     dawn_site.dawn_setup(app)
+    dawn_plugins.dawn_setup(app)
