@@ -15,3 +15,6 @@ server.log
 
 # 用户上传的媒体文件
 static/uploads/
+
+# 内部开发文档（不上传）
+docs/
